@@ -131,7 +131,12 @@ namespace UnityEngine.SpatialTracking
                         return TryGetNodePoseData(XR.XRNode.CenterEye, out resultPose);
                     }
                     return true;
-                }               
+                } 
+                default:
+                {
+                    Debug.LogWarningFormat("Unable to retrieve pose data for poseSource: {0}", poseSource.ToString());
+                    break;
+                }           
             }
             resultPose = Pose.identity;
             return false;
@@ -220,9 +225,21 @@ namespace UnityEngine.SpatialTracking
             /// </summary>
             ColorCamera = 6,
             /// <summary>
+            /// No Longer Used
+            /// </summary>
+            DepthCameraDeprecated = 7,
+            /// <summary>
+            /// No Longer Used
+            /// </summary>
+            FisheyeCameraDeprected = 8,
+            /// <summary>
+            /// No Longer Used
+            /// </summary>
+            DeviceDeprecated = 9,
+            /// <summary>
             /// The pose of a mobile remote
             /// </summary>
-            RemotePose = 7,
+            RemotePose = 10,
         }
 
         [SerializeField]
