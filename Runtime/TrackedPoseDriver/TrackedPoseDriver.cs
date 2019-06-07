@@ -1,9 +1,12 @@
 using System;
-using UnityEngine.XR;
 using System.Collections.Generic;
-using UnityEngine.XR.Tango;
-using UnityEngine.Experimental.XR.Interaction;
 using System.Runtime.CompilerServices;
+using UnityEngine.Experimental.XR.Interaction;
+
+#if ENABLE_VR
+using UnityEngine.XR;
+using UnityEngine.XR.Tango;
+#endif
 
 [assembly: InternalsVisibleTo("UnityEditor.SpatialTracking")]
 

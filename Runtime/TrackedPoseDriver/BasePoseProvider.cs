@@ -1,9 +1,12 @@
 using System;
-using UnityEngine.XR;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
+
+#if ENABLE_VR
+using UnityEngine.XR;
+#endif
 
 namespace UnityEngine.Experimental.XR.Interaction
 {

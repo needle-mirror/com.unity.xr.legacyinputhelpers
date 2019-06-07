@@ -203,40 +203,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 sensitivity = 0.1f,
                 type = 0,
             },
-            #endregion
-            #region KnucklesLeft
-            //######################################################################################################################################
-            // Knuckles Left
-            //######################################################################################################################################
-            new InputAxis()
-            {
-                name = "XRI_Left_IndexFinger",
-                descriptiveName = "Left Index Finger for a Knuckles Style controller",
-                axis = 21,
-                type = 2,
-            },
-            new InputAxis()
-            {
-                name = "XRI_Left_MiddleFinger",
-                descriptiveName = "Left Middle Finger for a Knuckles Style controller",
-                axis = 23,
-                type = 2,
-            },
-            new InputAxis()
-            {
-                name = "XRI_Left_RingFinger",
-                descriptiveName = "Left Ring Finger for a Knuckles Style controller",
-                axis = 25,
-                type = 2,
-            },
-            new InputAxis()
-            {
-                name = "XRI_Left_PinkyFinger",
-                descriptiveName = "Left Pinky Finger for a Knuckles Style controller",
-                axis = 27,
-                type = 2,
-            },
-            #endregion   
+            #endregion           
             #region RightHand
             //######################################################################################################################################
             // Right Hand
@@ -401,40 +368,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 sensitivity = 0.1f,
                 type = 0,
             },
-            #endregion
-            #region KnucklesRight
-            //######################################################################################################################################
-            // Knuckles Right
-            //######################################################################################################################################
-            new InputAxis()
-            {
-                name = "XRI_Right_IndexFinger",
-                descriptiveName = "Right Index Finger for a Knuckles Style controller",
-                axis = 22,
-                type = 2,
-            },
-            new InputAxis()
-            {
-                name = "XRI_Right_MiddleFinger",
-                descriptiveName = "Right Middle Finger for a Knuckles Style controller",
-                axis = 24,
-                type = 2,
-            },
-            new InputAxis()
-            {
-                name = "XRI_Right_RingFinger",
-                descriptiveName = "Right Ring Finger for a Knuckles Style controller",
-                axis = 26,
-                type = 2,
-            },
-            new InputAxis()
-            {
-                name = "XRI_Right_PinkyFinger",
-                descriptiveName = "Right Pinky Finger for a Knuckles Style controller",
-                axis = 28,
-                type = 2,
-            },
-            #endregion
+            #endregion           
             #region UGuiRequired
             //######################################################################################################################################
             // UGui Required
