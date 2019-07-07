@@ -12,7 +12,10 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
     [TestFixture]
     public class TestSeededInput
     {
-        
+
+        const int kNumOverlaps = 4; // we know there are four overlaps between the input asset, and the seeded assets.
+        const int kNumDupesToKeep = 2; 
+
         [Test]
         public void SeededInput_FillsOutCompleteData()
         {
@@ -22,10 +25,9 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
             var serializedObject = new SerializedObject(inputManagerAsset);
             var inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
 
-            // cache the number of items so we can reset.
-            inputManagerCurrentData.arraySize = 0;
+            // cache the number of items so we can reset.            
             int prevInputManagerSize = inputManagerCurrentData.arraySize;
-
+            
             SeedXRInputBindings tsxib = new SeedXRInputBindings();
 
             Dictionary<string, SeedXRInputBindings.BindingData> axisMap = new Dictionary<string, SeedXRInputBindings.BindingData>();
@@ -41,9 +43,8 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
             inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
 
             // did we create the right number of things?
-            Assert.That(inputManagerCurrentData.arraySize == prevInputManagerSize + tsxib.axisList.Count);
-                    
-            Dictionary<string, SeedXRInputBindings.BindingData> dataMap = new Dictionary<string, SeedXRInputBindings.BindingData>();
+            Assert.That(inputManagerCurrentData.arraySize == (prevInputManagerSize + tsxib.axisList.Count) - kNumOverlaps); // we subtract kNumOverlaps because we know there are 4 things duplicated and they shouldnt be included.
+
             List<SeedXRInputBindings.InputAxis> currentInputData = new List<SeedXRInputBindings.InputAxis>();
 
             tsxib.LoadExistingDataAndCheckAgainstNewData(inputManagerCurrentData, ref axisMap, ref currentInputData);
@@ -67,8 +68,9 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
             var serializedObject = new SerializedObject(inputManagerAsset);
             var inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
 
-            // cache the number of items so we can reset.
+            // cache the number of items so we can reset.            
             int prevInputManagerSize = inputManagerCurrentData.arraySize;
+            inputManagerCurrentData.arraySize = 0;
 
             SeedXRInputBindings tsxib = new SeedXRInputBindings();
 
@@ -84,28 +86,28 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
             inputManagerAsset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0];
             serializedObject = new SerializedObject(inputManagerAsset);
             inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
-            inputManagerCurrentData.arraySize = prevInputManagerSize + 2;
+            // we want to maintain a few records to ensure that we dont add duplicates.
+            inputManagerCurrentData.arraySize = kNumDupesToKeep;
 
-            Dictionary<string, SeedXRInputBindings.BindingData> dataMap = new Dictionary<string, SeedXRInputBindings.BindingData>();
             List<SeedXRInputBindings.InputAxis> currentInputData = new List<SeedXRInputBindings.InputAxis>();
 
             tsxib.LoadExistingDataAndCheckAgainstNewData(inputManagerCurrentData, ref axisMap, ref currentInputData);
 
-            // the axis map should now be true for every element.
+            // now, we should only have two elements that match, seeing as we only left two items in the asset.
             int trueCount = 0;
             foreach (var item in axisMap)
             {
                 if (item.Value.exists)
                     trueCount++;
             }
-            Assert.That(trueCount == 2);
+            Assert.That(trueCount == kNumDupesToKeep);
 
             tsxib.GenerateXRBindings();
             
             inputManagerAsset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0];
             serializedObject = new SerializedObject(inputManagerAsset);
             inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
-            Assert.That(inputManagerCurrentData.arraySize == prevInputManagerSize + tsxib.axisList.Count);
+            Assert.That(inputManagerCurrentData.arraySize == (prevInputManagerSize + tsxib.axisList.Count) - kNumOverlaps); // we subtract kNumOverlaps because we know there are 4 things duplicated and they shouldnt be included.
             tsxib.LoadExistingDataAndCheckAgainstNewData(inputManagerCurrentData, ref axisMap, ref currentInputData);
 
             // the axis map should now be true for every element.
