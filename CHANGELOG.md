@@ -4,6 +4,13 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.3.5] - 2019-07-17
+Minor changes to the TPD and its associated editor
+- TPD defaults to "Center Eye - HMD Reference" and Reference Tracking off.
+- Warnings for when center eye is not picked, if the TPD is on a camera
+- "Center Eye renamed" to "Center Eye - HMD Reference" for clarity
+
+Adds XR Settings page when using com.unity.xr.management that allows automatic TPD attachment to cameras.
 
 ## [1.3.4] - 2019-07-07
 Verified package for 2019.3

@@ -24,7 +24,7 @@ namespace UnityEngine.SpatialTracking
             {
                 PoseNames = new List<string>
                 {
-                    "Left Eye", "Right Eye", "Center Eye", "Head", "Color Camera"
+                    "Left Eye", "Right Eye", "Center Eye - HMD Reference", "Head", "Color Camera"
                 },
                 Poses = new List<TrackedPoseDriver.TrackedPose>
                 {
@@ -63,26 +63,56 @@ namespace UnityEngine.SpatialTracking
         };
     }
 
+ 	/// <summary>
+    /// Bitflag enum which represents what data was set on an associated Pose struct
+    /// </summary>
+
+    [Flags]
+    public enum PoseDataFlags
+    {
+        /// <summary>
+        /// No data was actually set on the pose
+        /// </summary>
+        NoData = 0,
+        /// <summary>
+        /// If this flag is set, position data was updated on the associated pose struct
+        /// </summary>
+        Position = 1 << 0,
+        /// <summary>
+        /// If this flag is set, rotation data was updated on the associated pose struct
+        /// </summary>
+        Rotation = 1 << 1,
+    }
+
+
+
     /// <summary>
     /// The PoseDataSource class acts as a container for the GetDatafromSource method call that should be used by PoseProviders wanting to query data for a particular pose.
     /// </summary>
     static public class PoseDataSource
     {
-        static internal List<XR.XRNodeState> nodeStates = new List<XR.XRNodeState>();        
-        static internal bool TryGetNodePoseData(XR.XRNode node, out Pose resultPose)
+        static internal List<XR.XRNodeState> nodeStates = new List<XR.XRNodeState>();
+        static internal PoseDataFlags GetNodePoseData(XR.XRNode node, out Pose resultPose)
         {
+            PoseDataFlags retData = PoseDataFlags.NoData;
             XR.InputTracking.GetNodeStates(nodeStates);
             foreach (XR.XRNodeState nodeState in nodeStates)
             {
                 if (nodeState.nodeType == node)
                 {
-                    bool result = nodeState.TryGetPosition(out resultPose.position);
-                    result |= nodeState.TryGetRotation(out resultPose.rotation);
-                    return result;
+                    if (nodeState.TryGetPosition(out resultPose.position))
+                    {
+                        retData |= PoseDataFlags.Position;
+                    }
+                    if (nodeState.TryGetRotation(out resultPose.rotation))
+                    {
+                        retData |= PoseDataFlags.Rotation;
+                    }
+                    return retData;
                 }
             }
             resultPose = Pose.identity;
-            return false;
+            return retData;
         }
 
         /// <summary>
@@ -93,47 +123,54 @@ namespace UnityEngine.SpatialTracking
         /// <returns>True, if the pose source is valid, otherwise false.</returns>                            
         static public bool TryGetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
         {
+            return GetDataFromSource(poseSource, out resultPose) == (PoseDataFlags.Position | PoseDataFlags.Rotation);
+        }
+
+        static internal PoseDataFlags GetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
+        {
             switch (poseSource)
             {
                 case TrackedPoseDriver.TrackedPose.RemotePose:
                 {
-                    if (!TryGetNodePoseData(XR.XRNode.RightHand, out resultPose))
-                        return TryGetNodePoseData(XR.XRNode.LeftHand, out resultPose);
-                    return true;
+                    PoseDataFlags retFlags = GetNodePoseData(XR.XRNode.RightHand, out resultPose);
+                    if (retFlags == PoseDataFlags.NoData)
+                        return GetNodePoseData(XR.XRNode.LeftHand, out resultPose);
+                    return retFlags;
                 }
                 case TrackedPoseDriver.TrackedPose.LeftEye:
                 {
-                    return TryGetNodePoseData(XR.XRNode.LeftEye, out resultPose);
+                    return GetNodePoseData(XR.XRNode.LeftEye, out resultPose);
                 }
                 case TrackedPoseDriver.TrackedPose.RightEye:
                 {
-                    return TryGetNodePoseData(XR.XRNode.RightEye, out resultPose);
+                    return GetNodePoseData(XR.XRNode.RightEye, out resultPose);
                 }
                 case TrackedPoseDriver.TrackedPose.Head:
                 {
-                    return TryGetNodePoseData(XR.XRNode.Head, out resultPose);
+                    return GetNodePoseData(XR.XRNode.Head, out resultPose);
                 }
                 case TrackedPoseDriver.TrackedPose.Center:
                 {
-                    return TryGetNodePoseData(XR.XRNode.CenterEye, out resultPose);
+                    return GetNodePoseData(XR.XRNode.CenterEye, out resultPose);
                 }
                 case TrackedPoseDriver.TrackedPose.LeftPose:
                 {
-                    return TryGetNodePoseData(XR.XRNode.LeftHand, out resultPose);
+                    return GetNodePoseData(XR.XRNode.LeftHand, out resultPose);
                 }
                 case TrackedPoseDriver.TrackedPose.RightPose:
                 {
-                    return TryGetNodePoseData(XR.XRNode.RightHand, out resultPose);
+                    return GetNodePoseData(XR.XRNode.RightHand, out resultPose);
                 }
                 case TrackedPoseDriver.TrackedPose.ColorCamera:
                 {
-                    if (!TryGetTangoPose(out resultPose))
+                    PoseDataFlags retFlags = TryGetTangoPose(out resultPose);
+                    if (retFlags == PoseDataFlags.NoData)
                     {
                         // We fall back to CenterEye because we can't currently extend the XRNode structure, nor are we ready to replace it.
-                        return TryGetNodePoseData(XR.XRNode.CenterEye, out resultPose);
+                        return GetNodePoseData(XR.XRNode.CenterEye, out resultPose);
                     }
-                    return true;
-                } 
+                    return retFlags;
+                }
                 default:
                 {
                     Debug.LogWarningFormat("Unable to retrieve pose data for poseSource: {0}", poseSource.ToString());
@@ -141,21 +178,21 @@ namespace UnityEngine.SpatialTracking
                 }              
             }
             resultPose = Pose.identity;
-            return false;
+            return PoseDataFlags.NoData;
         }
-       
-        static bool TryGetTangoPose(out Pose pose)
+
+        static PoseDataFlags TryGetTangoPose(out Pose pose)
         {
             PoseData poseOut;
             if (TangoInputTracking.TryGetPoseAtTime(out poseOut) && poseOut.statusCode == PoseStatus.Valid)
             {
                 pose.position = poseOut.position;
                 pose.rotation = poseOut.rotation;
-                return true;
+                return PoseDataFlags.Position | PoseDataFlags.Rotation;;
             }
             pose = Pose.identity;
 
-            return false;
+            return PoseDataFlags.NoData;
         }
     }
 
@@ -256,7 +293,7 @@ namespace UnityEngine.SpatialTracking
         }
 
         [SerializeField]
-        TrackedPose m_PoseSource;
+        TrackedPose m_PoseSource = TrackedPoseDriver.TrackedPose.Center;
         /// <summary>
         /// The pose being tracked by the tracked pose driver
         /// </summary>
@@ -308,14 +345,14 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
-        bool TryGetPoseData(DeviceType device, TrackedPose poseSource, out Pose resultPose)
+        PoseDataFlags GetPoseData(DeviceType device, TrackedPose poseSource, out Pose resultPose)
         {
             if (m_PoseProviderComponent != null)
             {
-                return m_PoseProviderComponent.TryGetPoseFromProvider(out resultPose);
+                return (m_PoseProviderComponent.TryGetPoseFromProvider(out resultPose) ? (PoseDataFlags.Position | PoseDataFlags.Rotation) : PoseDataFlags.NoData);
             }
 
-            return PoseDataSource.TryGetDataFromSource(poseSource, out resultPose);
+            return PoseDataSource.GetDataFromSource(poseSource, out resultPose);
         }
 
         /// <summary>
@@ -381,7 +418,7 @@ namespace UnityEngine.SpatialTracking
         }
 
         [SerializeField]
-        bool m_UseRelativeTransform = true;
+        bool m_UseRelativeTransform = false;
         /// <summary>
         ///  This is used to indicate whether the TrackedPoseDriver will use the object's original transform as its basis.
         /// </summary>
@@ -413,7 +450,7 @@ namespace UnityEngine.SpatialTracking
 
         private void ResetToCachedLocalPosition()
         {
-            SetLocalTransform(m_OriginPose.position, m_OriginPose.rotation);
+            SetLocalTransform(m_OriginPose.position, m_OriginPose.rotation, PoseDataFlags.Position | PoseDataFlags.Rotation);
         }
 
         protected virtual void Awake()
@@ -475,16 +512,18 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
-        protected virtual void SetLocalTransform(Vector3 newPosition, Quaternion newRotation)
+        protected virtual void SetLocalTransform(Vector3 newPosition, Quaternion newRotation, PoseDataFlags poseFlags)
         {
-            if (m_TrackingType == TrackingType.RotationAndPosition ||
-                m_TrackingType == TrackingType.RotationOnly)
+            if ((m_TrackingType == TrackingType.RotationAndPosition ||
+                 m_TrackingType == TrackingType.RotationOnly) &&
+                (poseFlags & PoseDataFlags.Rotation) > 0)
             {
                 transform.localRotation = newRotation;
             }
 
-            if (m_TrackingType == TrackingType.RotationAndPosition ||
-                m_TrackingType == TrackingType.PositionOnly)
+            if ((m_TrackingType == TrackingType.RotationAndPosition ||
+                 m_TrackingType == TrackingType.PositionOnly) &&
+                (poseFlags & PoseDataFlags.Position) > 0)
             {
                 transform.localPosition = newPosition;
             }
@@ -514,10 +553,11 @@ namespace UnityEngine.SpatialTracking
                 return;
             Pose currentPose = new Pose();
             currentPose = Pose.identity;
-            if (TryGetPoseData(m_Device, m_PoseSource, out currentPose))
+            PoseDataFlags poseFlags = GetPoseData(m_Device, m_PoseSource, out currentPose);
+            if (poseFlags != PoseDataFlags.NoData)
             {
                 Pose localPose = TransformPoseByOriginIfNeeded(currentPose);
-                SetLocalTransform(localPose.position, localPose.rotation);
+                SetLocalTransform(localPose.position, localPose.rotation, poseFlags);
             }
         }
     }
