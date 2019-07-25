@@ -69,7 +69,7 @@ namespace UnityEngine.SpatialTracking
                     int index = EditorGUI.Popup(rect, selectedIndex, TrackedPoseDriverDataDescription.DeviceData[m_DeviceProp.enumValueIndex].PoseNames.ToArray());
                     m_PoseLabelProp.enumValueIndex = (int)TrackedPoseDriverDataDescription.DeviceData[m_DeviceProp.enumValueIndex].Poses[index];
                     if(tpd && 
-                        (selectedIndex == 0 && m_PoseLabelProp.enumValueIndex !=  (int)(TrackedPoseDriver.TrackedPose.Center)))
+                        (m_DeviceProp.enumValueIndex == 0 && m_PoseLabelProp.enumValueIndex !=  (int)(TrackedPoseDriver.TrackedPose.Center)))
                     {
                         Camera camera = tpd.GetComponent<Camera>();
                         if(camera != null)
