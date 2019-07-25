@@ -21,7 +21,7 @@ namespace UnityEngine.SpatialTracking
             public static GUIContent poseProviderLabel = EditorGUIUtility.TrTextContent("Use Pose Provider", " [Optional] when a PoseProvider object is attached here, the pose provider will be used as the data source, not the Device/Pose settings on the Tracked Pose Driver");
             public static readonly string poseProviderWarning = "This Tracked Pose Driver is using an external component as its Pose Source.";
             public static readonly string devicePropWarning = "The selected Pose Source is not valid, please pick a different pose";
-            public static readonly string poseProviderTooltip = "";
+            public static readonly string cameraWarning = "The Tracked Pose Driver is attached to a camera, but is not tracking the Center Eye / HMD Reference. This may cause tracking problems if this camera is intended to track the headset.";
         }
 
         SerializedProperty m_DeviceProp = null;
@@ -43,6 +43,8 @@ namespace UnityEngine.SpatialTracking
 
         public override void OnInspectorGUI()
         {
+       
+            TrackedPoseDriver tpd = target as TrackedPoseDriver;
             serializedObject.Update();
 
             if (m_PoseProviderProp.objectReferenceValue == null)
@@ -66,6 +68,15 @@ namespace UnityEngine.SpatialTracking
                 {
                     int index = EditorGUI.Popup(rect, selectedIndex, TrackedPoseDriverDataDescription.DeviceData[m_DeviceProp.enumValueIndex].PoseNames.ToArray());
                     m_PoseLabelProp.enumValueIndex = (int)TrackedPoseDriverDataDescription.DeviceData[m_DeviceProp.enumValueIndex].Poses[index];
+                    if(tpd && 
+                        (m_DeviceProp.enumValueIndex == 0 && m_PoseLabelProp.enumValueIndex !=  (int)(TrackedPoseDriver.TrackedPose.Center)))
+                    {
+                        Camera camera = tpd.GetComponent<Camera>();
+                        if(camera != null)
+                        {
+                            EditorGUILayout.HelpBox(Styles.cameraWarning, MessageType.Warning, true);
+                        }
+                    }
                 }
                 else
                 {

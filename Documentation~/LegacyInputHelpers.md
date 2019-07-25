@@ -19,6 +19,7 @@ The com.unity.xr.legacyinputhelpers package contains a number of useful helpers 
 * [Tracked Pose Driver](#Tracked-Pose-Driver)
 * [XR Input Binding Seeder](#Seeding-XR-Input-Bindings)
 * [Arm Models](ArmModels.md)
+* [Using with XR Management](#Using-with-XR-Management)
 
 # Tracked Pose Driver
 
@@ -119,6 +120,21 @@ Loading the Legacy Input Helpers package will add an additional menu option unde
 ![Asset Menu](images/assetmenu.png)
 
 Clicking this menu option will seed the Input Asset with the Unity Cross Platform Input bindings. The XR Input Bindings will not replace any bindings which are already present in the Input Asset with the same name
+<hr>
+
+
+# Using with XR Management
+
+When using com.unity.xr.legacyinputhelpers in conjunction with the com.xr.management package a number of additional helpers are available in the `Settings -> XR Plugin Management -> XR Tracking` Menu. These helpers can be used to automate adding Tracked Pose Drivers to various cameras within the current scene.
+
+Implicit camera tracking is no longer supported with XRSDK. In order to correctly track the HMD, phone or other device the Tracked Pose Driver can be used to implement Camera Tracking.
+
+The XR Tracking Pane provides three options
+- Add a tracked pose driver to all cameras which are tagged with 'Main Camera' in the current scene
+- Add a tracked pose driver to all cameras which are "stereo" in the current scene
+- Add a tracked pose driver to any camera in the current scene
+
+Any camera that is modified by clicking one of the options will be logged to the console window.
 
 
 <hr>
@@ -130,3 +146,4 @@ Clicking this menu option will seed the Input Asset with the Unity Cross Platfor
 |Sept 13, 2018|Update to final release version, changed name to final|
 |Oct 8,2018| renamed to legacyinputhelpers|
 |Oct 15,2018| Added section for seeding XR Input Bindings|
+|July 19,2018| Added section for using this package with XR Management|

@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.6] - 2019-07-25
+Fix for incorrect selection logic (from 1.3.6)
+
+## [2.0.5] - 2019-07-23
+merges 1.3.5 into the mainline stream
+
 ## [2.0.4] - 2019-06-07
 Update version number for Yamato.
 
@@ -32,8 +38,22 @@ All pose providers in this package have been updated, as has the tracked pose dr
 
 New unit tests added for this case in the tracked pose driver
 
-## [1.3.2] - 2019-01-02
-fixes standalone compile error
+## [1.3.6] - 2019-07-25
+Fix for incorrect selection logic
+
+## [1.3.5] - 2019-07-17
+Minor changes to the TPD and its associated editor
+- TPD defaults to "Center Eye - HMD Reference" and Reference Tracking off.
+- Warnings for when center eye is not picked, if the TPD is on a camera
+- "Center Eye renamed" to "Center Eye - HMD Reference" for clarity
+
+Adds XR Settings page when using com.unity.xr.management that allows automatic TPD attachment to cameras.
+
+## [1.3.4] - 2019-07-07
+Verified package for 2019.3
+
+## [1.3.2] - 2019-01-18
+fixes standalone only compile error
 
 ## [1.3.1] - 2018-12-17
 merges 1.0.3 into mainline branch.

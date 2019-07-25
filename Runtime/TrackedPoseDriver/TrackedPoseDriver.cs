@@ -28,7 +28,7 @@ namespace UnityEngine.SpatialTracking
             {
                 PoseNames = new List<string>
                 {
-                    "Left Eye", "Right Eye", "Center Eye", "Head", "Color Camera"
+                    "Left Eye", "Right Eye", "Center Eye - HMD Reference", "Head", "Color Camera"
                 },
                 Poses = new List<TrackedPoseDriver.TrackedPose>
                 {
@@ -67,7 +67,7 @@ namespace UnityEngine.SpatialTracking
         };
     }
 
-    /// <summary>
+ 	/// <summary>
     /// Bitflag enum which represents what data was set on an associated Pose struct
     /// </summary>
 
@@ -296,7 +296,7 @@ namespace UnityEngine.SpatialTracking
         }
 
         [SerializeField]
-        TrackedPose m_PoseSource;
+        TrackedPose m_PoseSource = TrackedPoseDriver.TrackedPose.Center;
         /// <summary>
         /// The pose being tracked by the tracked pose driver
         /// </summary>
@@ -421,7 +421,7 @@ namespace UnityEngine.SpatialTracking
         }
 
         [SerializeField]
-        bool m_UseRelativeTransform = true;
+        bool m_UseRelativeTransform = false;
         /// <summary>
         ///  This is used to indicate whether the TrackedPoseDriver will use the object's original transform as its basis.
         /// </summary>
