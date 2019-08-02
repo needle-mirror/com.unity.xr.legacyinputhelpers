@@ -1,9 +1,15 @@
 using System;
-using UnityEngine.XR;
 using System.Collections.Generic;
-using UnityEngine.XR.Tango;
-using UnityEngine.Experimental.XR.Interaction;
 using System.Runtime.CompilerServices;
+
+#if ENABLE_VR || ENABLE_AR
+using UnityEngine.XR;
+using UnityEngine.Experimental.XR.Interaction;
+#endif
+
+#if ENABLE_AR
+using UnityEngine.XR.Tango;
+#endif
 
 [assembly: InternalsVisibleTo("UnityEditor.SpatialTracking")]
 
@@ -91,7 +97,8 @@ namespace UnityEngine.SpatialTracking
     /// </summary>
     static public class PoseDataSource
     {
-        static internal List<XR.XRNodeState> nodeStates = new List<XR.XRNodeState>();
+#if ENABLE_AR || ENABLE_VR
+        static internal List<XR.XRNodeState> nodeStates = new List<XR.XRNodeState>();        
         static internal PoseDataFlags GetNodePoseData(XR.XRNode node, out Pose resultPose)
         {
             PoseDataFlags retData = PoseDataFlags.NoData;
@@ -114,6 +121,7 @@ namespace UnityEngine.SpatialTracking
             resultPose = Pose.identity;
             return retData;
         }
+#endif
 
         /// <summary>
         /// <signature><![CDATA[TryGetDataFromSource(TrackedPose,Pose)]]></signature>
@@ -128,6 +136,8 @@ namespace UnityEngine.SpatialTracking
 
         static internal PoseDataFlags GetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
         {
+
+#if ENABLE_AR || ENABLE_VR
             switch (poseSource)
             {
                 case TrackedPoseDriver.TrackedPose.RemotePose:
@@ -177,12 +187,14 @@ namespace UnityEngine.SpatialTracking
                     break;
                 }              
             }
+#endif
             resultPose = Pose.identity;
             return PoseDataFlags.NoData;
         }
 
         static PoseDataFlags TryGetTangoPose(out Pose pose)
         {
+#if ENABLE_AR
             PoseData poseOut;
             if (TangoInputTracking.TryGetPoseAtTime(out poseOut) && poseOut.statusCode == PoseStatus.Valid)
             {
@@ -190,6 +202,7 @@ namespace UnityEngine.SpatialTracking
                 pose.rotation = poseOut.rotation;
                 return PoseDataFlags.Position | PoseDataFlags.Rotation;;
             }
+#endif
             pose = Pose.identity;
 
             return PoseDataFlags.NoData;
@@ -459,7 +472,9 @@ namespace UnityEngine.SpatialTracking
 
             if (HasStereoCamera())
             {
+#if ENABLE_AR || ENABLE_VR
                 XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), true);
+#endif
             }
         }
 
@@ -467,7 +482,7 @@ namespace UnityEngine.SpatialTracking
         {
             if (HasStereoCamera())
             {
-#if ENABLE_VR
+#if ENABLE_AR || ENABLE_VR
                 XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), false);
 #endif
             }
