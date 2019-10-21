@@ -3,9 +3,12 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SpatialTracking;
 using System.Linq;
+
+
+#if ENABLE_VR || ENABLE_AR
 using UnityEngine.Experimental.XR.Interaction;
+using UnityEngine.SpatialTracking;
 
 namespace UnityEngine.SpatialTracking
 {
@@ -142,4 +145,6 @@ namespace UnityEngine.SpatialTracking
         }
     }
 }
+
+#endif
     

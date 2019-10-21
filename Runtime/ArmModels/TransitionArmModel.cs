@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
+
+#if ENABLE_VR || ENABLE_AR
 using UnityEngine.Experimental.XR.Interaction;
 
 [assembly: InternalsVisibleTo("UnityEditor.XR.LegacyInputHelpers")]
@@ -251,3 +253,5 @@ namespace UnityEngine.XR.LegacyInputHelpers
 #endif
     }
 }
+
+#endif

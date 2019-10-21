@@ -18,8 +18,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.XR.Interaction;
+
+#if ENABLE_VR || ENABLE_AR
 using UnityEngine.SpatialTracking;
+using UnityEngine.Experimental.XR.Interaction;
 
 namespace UnityEngine.XR.LegacyInputHelpers
 {
@@ -635,3 +637,5 @@ namespace UnityEngine.XR.LegacyInputHelpers
 #endif // UNITY_EDITOR
     }
 }
+
+#endif

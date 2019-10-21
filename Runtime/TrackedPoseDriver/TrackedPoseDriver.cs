@@ -340,6 +340,7 @@ namespace UnityEngine.SpatialTracking
             return false;
         }
 
+#if ENABLE_VR || ENABLE_AR
         [SerializeField]
         BasePoseProvider m_PoseProviderComponent = null;
         /// <summary>
@@ -357,15 +358,18 @@ namespace UnityEngine.SpatialTracking
                 m_PoseProviderComponent = value;
             }
         }
+#endif
 
         PoseDataFlags GetPoseData(DeviceType device, TrackedPose poseSource, out Pose resultPose)
         {
+#if ENABLE_VR || ENABLE_AR            
             if (m_PoseProviderComponent != null)
             {
                 return (m_PoseProviderComponent.TryGetPoseFromProvider(out resultPose) ? (PoseDataFlags.Position | PoseDataFlags.Rotation) : PoseDataFlags.NoData);
             }
-
+#endif
             return PoseDataSource.GetDataFromSource(poseSource, out resultPose);
+
         }
 
         /// <summary>

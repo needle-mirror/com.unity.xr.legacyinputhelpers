@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if ENABLE_VR || ENABLE_AR
+
 namespace UnityEngine.Experimental.XR.Interaction
 {
     /// <summary>
@@ -17,3 +19,5 @@ namespace UnityEngine.Experimental.XR.Interaction
         public abstract bool TryGetPoseFromProvider(out Pose output);
     }
 }
+
+#endif
