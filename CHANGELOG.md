@@ -4,6 +4,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [1.3.11] - 2020-02-05
+fix for UnityEngine.XR usage outside of ifdefs.
+
+## [1.3.10] - 2019-12-05
+fix for programatically added TPD's not saving
+
+## [1.3.9] - 2019-11-12
+Fixes for 2020.1 deprecation of features.
+
 ## [1.3.8] - 2019-10-21
 Fixes switch compile errors.
 

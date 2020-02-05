@@ -1,10 +1,10 @@
 using System;
-using UnityEngine.XR;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 #if ENABLE_VR || ENABLE_AR
+using UnityEngine.XR;
 
 namespace UnityEngine.Experimental.XR.Interaction
 {

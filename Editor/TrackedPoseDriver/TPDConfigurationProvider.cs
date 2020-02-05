@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using UnityEditor;
-
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,6 +45,7 @@ namespace UnityEngine.SpatialTracking
             tpd.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Center);
             tpd.UseRelativeTransform = false;
             Debug.Log("Added Tracked Pose Driver to the camera named " + camera.name, camera);
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
 
         private void AddTPDToMainCamerasInScene()

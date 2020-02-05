@@ -473,23 +473,30 @@ namespace UnityEngine.SpatialTracking
         protected virtual void Awake()
         {
             CacheLocalPosition();
-
+#if UNITY_2019_3_OR_NEWER
+            //  deprecated functionality in 2020.1
+#else
             if (HasStereoCamera())
             {
 #if ENABLE_AR || ENABLE_VR
                 XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), true);
 #endif
             }
+#endif
         }
 
         protected virtual void OnDestroy()
         {
+#if UNITY_2019_3_OR_NEWER
+            //  deprecated functionality in 2020.1
+#else
             if (HasStereoCamera())
             {
 #if ENABLE_AR || ENABLE_VR
                 XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), false);
 #endif
             }
+#endif
         }
 
         protected virtual void OnEnable()
