@@ -13,7 +13,6 @@ using UnityEngine.XR.Tango;
 
 [assembly: InternalsVisibleTo("UnityEditor.SpatialTracking")]
 
-
 namespace UnityEngine.SpatialTracking
 {
     internal class TrackedPoseDriverDataDescription
@@ -123,6 +122,17 @@ namespace UnityEngine.SpatialTracking
 #endif
 
         /// <summary>
+        /// <signature><![CDATA[TryGetDataFromSource(TrackedPose,Pose)]]></signature>
+        /// <summary>The GetDatafromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
+        /// <param name = "poseSource" > The pose source to request data for.</param>
+        /// <param name = "resultPose" > The resulting pose data.</param>
+        /// <returns>True, if the pose source is valid, otherwise false.</returns>                            
+        static public bool TryGetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
+        {
+            return GetDataFromSource(poseSource, out resultPose) == (PoseDataFlags.Position | PoseDataFlags.Rotation);
+        }
+
+        /// <summary>
         /// <signature><![CDATA[GetDataFromSource(TrackedPose,Pose)]]></signature>
         /// <summary>The GetDatafromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
         /// <param name = "poseSource" > The pose source to request data for.</param>
@@ -219,6 +229,7 @@ namespace UnityEngine.SpatialTracking
     [DefaultExecutionOrder(-30000)]
     [Serializable]
     [AddComponentMenu("XR/Tracked Pose Driver")]
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.xr.legacyinputhelpers@2.1/manual/index.html")]
     public class TrackedPoseDriver : MonoBehaviour
     {
         /// <summary>
@@ -363,6 +374,7 @@ namespace UnityEngine.SpatialTracking
             }
 #endif
             return PoseDataSource.GetDataFromSource(poseSource, out resultPose);
+
         }
 
         /// <summary>

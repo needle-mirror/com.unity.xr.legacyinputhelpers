@@ -4,8 +4,18 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## [2.1.1] - 2020-03-27
+Better backcompat with 1.3.X streams 
+
+## [2.1.0] - 2020-03-25
+Roll up of 1.4.0, 1.4.1, 1.4.2 XR Management changes to the 2.X stream
+
 ## [2.0.8] - 2020-02-13
 Roll up of fixes from 1.3.9->1.3.11
+fix for UnityEngine.XR usage outside of ifdefs.
+fix for programatically added TPD's not saving
+Fixes for 2020.1 deprecation of features.
 
 ## [2.0.7] - 2019-12-18
 Fixes for 2020.1 deprecation of features. (from 1.3.9)
@@ -44,6 +54,30 @@ public virtual PoseDataFlags GetPoseFromProvider(out Pose output)
 All pose providers in this package have been updated, as has the tracked pose driver code to correctly handle the returned bitflags. Any user derived users of this API will need to also update their code accordingly.
 
 New unit tests added for this case in the tracked pose driver
+
+## [1.4.2] - 2020-03-24
+removes incorrect comment.
+
+## [1.4.1] - 2020-03-23
+minor tweaks to version
+
+## [1.4.0] - 2020-02-11
+Updates for XR Management UX Flow changes, the correct version to use for XR mgt is 2.1.0
+
+## [1.3.11] - 2020-02-05
+fix for UnityEngine.XR usage outside of ifdefs.
+
+## [1.3.10] - 2019-12-05
+fix for programatically added TPD's not saving
+
+## [1.3.9] - 2019-11-12
+Fixes for 2020.1 deprecation of features.
+
+## [1.3.8] - 2019-10-21
+Fixes switch compile errors.
+
+## [1.3.7] - 2019-08-02
+Fix for PS4 compile error.
 
 ## [1.3.6] - 2019-07-25
 Fix for incorrect selection logic

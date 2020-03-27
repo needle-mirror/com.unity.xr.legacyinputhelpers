@@ -15,7 +15,7 @@ Pose provider plugins are used to allow custom logic to be performed while still
 
 The following image shows how to use the arm model pose provider with a tracked pose driver:
 
-![Arm Model TPD Examples](images/ArmModelImages/TrackedPoseDriverArmModelExample.png)
+![Arm Model TPD Examples](Images/ArmModelImages/TrackedPoseDriverArmModelExample.png)
 
 The above image shows that the arm model monobehaviour has been linked to the use pose provider field of the tracked pose driver
 
@@ -28,7 +28,7 @@ The base arm model can be used for most situations that require pointing or thro
 
 The image below shows the base arm model component:
 
-![Base Arm Model](images/ArmModelImages/armmodelbase.png)
+![Base Arm Model](Images/ArmModelImages/armmodelbase.png)
 
 The following table details the Arm Model inspector controls:
 
@@ -60,7 +60,7 @@ In the swing arm model, there is a second set of rotation ratio parameters that 
 
 the image below shows the swing arm model component:
 
-![Swing Model](images/ArmModelImages/swingarmmodel.png)
+![Swing Model](Images/ArmModelImages/swingarmmodel.png)
 
 | Control Name | Description |
 | ------------ | ----------- | 
@@ -94,7 +94,7 @@ Changing the arm model at runtime will cause the newly requested arm model to be
 
 The image below shows the transition arm model component.
 
-![Transition Arm Model](images/ArmModelImages/Transitionarmmodel.png)
+![Transition Arm Model](Images/ArmModelImages/Transitionarmmodel.png)
 
 ## Current Arm Model Component
 
@@ -131,7 +131,7 @@ For Example:
 
  The following image shows how the transition arm model would be configured to work with a number of arm models, and our example script found below:
 
-![Example Configuration For Transition Arm Model Usage](images/ArmModelImages/ExampleTransitionArmModelSetup.png)
+![Example Configuration For Transition Arm Model Usage](Images/ArmModelImages/ExampleTransitionArmModelSetup.png)
 
 
 Here, the tracked pose driver is set to be driven by the transition arm model on this game object. 
