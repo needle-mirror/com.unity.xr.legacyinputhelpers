@@ -26,7 +26,7 @@ namespace UnityEngine.Experimental.XR.Interaction
             {
                 return PoseDataFlags.Position | PoseDataFlags.Rotation;
             }
-#pragma warning enable 618,619
+#pragma warning restore 618,619
             return PoseDataFlags.NoData;
         }
 
