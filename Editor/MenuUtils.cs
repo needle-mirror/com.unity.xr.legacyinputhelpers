@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if URP_PRESENT
+using UnityEngine.Rendering.Universal;
+#endif
+
+#if HDRP_PRESENT
+using UnityEngine.Rendering.HighDefinition;
+#endif
 
 #if ENABLE_VR || ENABLE_AR
 using UnityEngine.SpatialTracking;
@@ -105,8 +112,17 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 var componentList = xrCamera.gameObject.GetComponents(typeof(MonoBehaviour));
                 if(componentList.Length != 0)
                 {
-                    Debug.LogError("Your Main Camera has additional components that we do not recognize. We are unable to automatically convert your scene. Please see the documentation on how to upgrade your scene.");                    
-                    return;
+
+#if HDRP_PRESENT
+                    if (!(componentList.Length == 1 && componentList[0].GetType() == typeof(HDAdditionalCameraData)))
+#endif
+#if URP_PRESENT
+                    if (!(componentList.Length == 1 && componentList[0].GetType() == typeof(UniversalAdditionalCameraData)))
+#endif
+                    {
+                        Debug.LogError("Your Main Camera has additional components that we do not recognize. We are unable to automatically convert your scene. Please see the documentation on how to upgrade your scene.");
+                        return;
+                    }
                 }
 
             }
