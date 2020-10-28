@@ -121,8 +121,6 @@ namespace UnityEngine.SpatialTracking
         }
 #endif
 
-        /// <summary>
-        /// <signature><![CDATA[TryGetDataFromSource(TrackedPose,Pose)]]></signature>
         /// <summary>The GetDatafromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
         /// <param name = "poseSource" > The pose source to request data for.</param>
         /// <param name = "resultPose" > The resulting pose data.</param>
@@ -132,8 +130,7 @@ namespace UnityEngine.SpatialTracking
             return GetDataFromSource(poseSource, out resultPose) == (PoseDataFlags.Position | PoseDataFlags.Rotation);
         }
 
-        /// <summary>
-        /// <signature><![CDATA[GetDataFromSource(TrackedPose,Pose)]]></signature>
+    
         /// <summary>The GetDatafromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
         /// <param name = "poseSource" > The pose source to request data for.</param>
         /// <param name = "resultPose" > The resulting pose data. This function will return the Center Eye pose if the Color Camera pose is not available. </param>
@@ -251,6 +248,9 @@ namespace UnityEngine.SpatialTracking
             GenericXRRemote = 2
         }
 
+        /// <summary>
+        /// The list of endpoints that users can track with the <see cref="TrackedPoseDriver"/>
+        /// </summary>
         public enum TrackedPose
         {
             /// <summary>
@@ -449,15 +449,18 @@ namespace UnityEngine.SpatialTracking
             get { return m_UseRelativeTransform; }
             set { m_UseRelativeTransform = value; }
         }
-
+        /// <summary>        
+        /// The origin pose is the offset applied to any tracking data. This is only used when in legacy compatibility mode.
+        /// </summary>
         protected Pose m_OriginPose;
-
-        // originPose is an offset applied to any tracking data read from this object.
-        // Setting this value should be reserved for dealing with edge-cases, such as
-        // achieving parity between room-scale (floor centered) and stationary (head centered)
-        // tracking - without having to alter the transform hierarchy.
-        // For user locomotion and gameplay purposes you are usually better off just
-        // moving the parent transform of this object.
+        /// <summary>
+        /// originPose is an offset applied to any tracking data read from this object.
+        /// Setting this value should be reserved for dealing with edge-cases, such as
+        /// achieving parity between room-scale (floor centered) and stationary (head centered)
+        /// tracking - without having to alter the transform hierarchy.
+        /// For user locomotion and gameplay purposes you are usually better off just
+        /// moving the parent transform of this object.
+        /// </summary>
         public Pose originPose
         {
             get { return m_OriginPose; }
@@ -475,6 +478,7 @@ namespace UnityEngine.SpatialTracking
             SetLocalTransform(m_OriginPose.position, m_OriginPose.rotation, PoseDataFlags.Position | PoseDataFlags.Rotation);
         }
 
+        /// <inheritdoc />    
         protected virtual void Awake()
         {
             CacheLocalPosition();
@@ -490,6 +494,7 @@ namespace UnityEngine.SpatialTracking
 #endif
         }
 
+        /// <inheritdoc />
         protected virtual void OnDestroy()
         {
 #if UNITY_2019_3_OR_NEWER
@@ -504,11 +509,13 @@ namespace UnityEngine.SpatialTracking
 #endif
         }
 
+        /// <inheritdoc />
         protected virtual void OnEnable()
         {
             Application.onBeforeRender += OnBeforeRender;
         }
 
+        /// <inheritdoc />
         protected virtual void OnDisable()
         {
             // remove delegate registration            
@@ -516,6 +523,7 @@ namespace UnityEngine.SpatialTracking
             Application.onBeforeRender -= OnBeforeRender;
         }
 
+        /// <inheritdoc />
         protected virtual void FixedUpdate()
         {
             if (m_UpdateType == UpdateType.Update ||
@@ -525,6 +533,7 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
+        /// <inheritdoc />
         protected virtual void Update()
         {
             if (m_UpdateType == UpdateType.Update ||
@@ -534,6 +543,7 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
+        /// <inheritdoc />
         protected virtual void OnBeforeRender()
         {
             if (m_UpdateType == UpdateType.BeforeRender ||
@@ -543,6 +553,12 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
+        /// <summary>
+        /// Sets the transform that is being driven by the <see cref="TrackedPoseDriver"/>. will only correct set the rotation or position depending on the <see cref="PoseDataFlags"/>
+        /// </summary>
+        /// <param name="newPosition">The position to apply.</param>
+        /// <param name="newRotation">The rotation to apply.</param>
+        /// <param name="poseFlags">The flags indiciating which of the position/rotation values are provided by the calling code.</param>
         protected virtual void SetLocalTransform(Vector3 newPosition, Quaternion newRotation, PoseDataFlags poseFlags)
         {
             if ((m_TrackingType == TrackingType.RotationAndPosition ||
@@ -560,6 +576,11 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
+        /// <summary>
+        /// This is only used when running in legacy mode, and will fake the behavior of the old implicit camera tracking. This will transform by the origin pose if necessary.
+        /// </summary>
+        /// <param name="pose">Pose to transform by the origin if in relative transform mode.</param>
+        /// <returns>The pose, with the applied transform if in Relative Transform mode.</returns>
         protected Pose TransformPoseByOriginIfNeeded(Pose pose)
         {
             if (m_UseRelativeTransform)
@@ -578,6 +599,9 @@ namespace UnityEngine.SpatialTracking
             return camera != null && camera.stereoEnabled;
         }
 
+        /// <summary>
+        /// PerformUpdate queries the data from the selected pose source, and then calls <see cref="SetLocalTransform"/> to apply the pose.
+        /// </summary>
         protected virtual void PerformUpdate()
         {
             if (!enabled)

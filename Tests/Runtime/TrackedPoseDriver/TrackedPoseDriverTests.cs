@@ -13,9 +13,9 @@ using UnityEngine.SpatialTracking;
 namespace UnityEngine.SpatialTracking
 {
     [TestFixture]
-    public class TrackedPoseDriverTests
+    internal class TrackedPoseDriverTests
     {
-        public class TestTrackedPoseDriverWrapper : TrackedPoseDriver
+        internal class TestTrackedPoseDriverWrapper : TrackedPoseDriver
         {
             public void FakeUpdate()
             {

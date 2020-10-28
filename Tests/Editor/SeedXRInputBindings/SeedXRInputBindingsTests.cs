@@ -10,7 +10,7 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
 {
 
     [TestFixture]
-    public class TestSeededInput
+    internal class TestSeededInput
     {
 
         const int kNumOverlaps = 4; // we know there are four overlaps between the input asset, and the seeded assets.

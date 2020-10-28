@@ -447,7 +447,10 @@ namespace UnityEditor.XR.LegacyInputHelpers
         }
         #endregion
 
-        [MenuItem("Assets/Seed XR Input Bindings")]
+        ///<summary>
+        /// Menu option which will allow users to seed the automatic bindings for the legacy input system.
+        ///</summary>
+        [MenuItem("Assets/Seed XR Input Bindings")]  
         static public void GenerateXRBindingsMenuItem()
         {
             SeedXRInputBindings sxrib = new SeedXRInputBindings();
