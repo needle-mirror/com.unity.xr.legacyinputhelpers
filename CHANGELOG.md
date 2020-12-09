@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.7] - 2020-12-09
+Fixes XR Rig upgrade scenarios for when URP and HDRP are in the same project
+Tests agains URP and HDRP v11.
+
 ## [2.1.6] - 2020-10-28
 Fixes error message when using the color camera
 Changes default near clip plane to 0.01f

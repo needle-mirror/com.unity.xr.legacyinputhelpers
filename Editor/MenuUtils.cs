@@ -126,29 +126,58 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 if (componentList.Count != 0)
                 {
 
-#if HDRP_PRESENT_10_0
-                    if (!xrCamera.IsHDCamera())
+                    bool hdrp = false;
+                    bool urp = false;
+                    bool legacy = false;
+
+#if HDRP_PRESENT
+                    hdrp = true;
 #endif
-#if HDRP_PRESENT_10_1_OR_NEWER
-                    if (!ComponentUtility.IsHDCamera(xrCamera))
+#if URP_PRESENT
+                    urp = true;
 #endif
+                    legacy = !hdrp && !urp;
+
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
+                    bool hdrpCameraOk = false;
+                    bool urpCameraOk = false;
+                    bool hdrpComponentOk = true;
+                    bool urpComponentOk = true;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
+
+                    // HDRP section.                    
+#if HDRP_PRESENT
+#if HDR_PRESENT_10_0
+                    hdrpCameraOk = xrCamera.IsHDCamera();
+                    hdrpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(HDAdditionalCameraData)));
+#elif HDRP_PRESENT_10_1_OR_NEWER
+                    hdrpCameraOk = UnityEngine.Rendering.HighDefinition.ComponentUtility.IsHDCamera(xrCamera);
+                    hdrpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(HDAdditionalCameraData)));
+#else
+                    hdrpCameraOk = true;
+                    hdrpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(HDAdditionalCameraData)));
+#endif
+#endif
+
+                    // URP Section   
+#if URP_PRESENT
 #if URP_PRESENT_10_0
-                    if (!xrCamera.IsUniversalCamera())
+                    urpCameraOk = xrCamera.IsUniversalCamera();
+                    urpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(UniversalAdditionalCameraData)));
+#elif URP_PRESENT_10_1_OR_NEWER
+                    urpCameraOk = UnityEngine.Rendering.Universal.ComponentUtility.IsUniversalCamera(xrCamera);
+                    urpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(UniversalAdditionalCameraData)));
+#else
+                    urpCameraOk = true;                    
+                    urpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(UniversalAdditionalCameraData)));
 #endif
-#if URP_PRESENT_10_1_OR_NEWER
-                    if (!ComponentUtility.IsUniversalCamera(xrCamera))
 #endif
-#if HDRP_PRESENT && !HDRP_PRESENT_10_1_OR_NEWER && !HDRP_PRESENT_10_0
-                    if (!(componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(HDAdditionalCameraData))))
-#endif
-#if URP_PRESENT && !URP_PRESENT_10_1_OR_NEWER && !URP_PRESENT_10_0
-                        if (!(componentList.Count <= 2
-                        && componentList.Find(x => x.GetType() == typeof(UniversalAdditionalCameraData))))
-#endif
+                    if (!((hdrp && hdrpCameraOk && hdrpComponentOk) || (urp && urpCameraOk && urpComponentOk)  || (legacy)))
                     {
                         Debug.LogError("Your Main Camera has additional components that we do not recognize. We are unable to automatically convert your scene. Please see the documentation on how to upgrade your scene.");
                         return null;
                     }
+
                 }
                 return xrCamera;
             }
