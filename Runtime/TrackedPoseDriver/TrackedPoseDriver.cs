@@ -216,8 +216,8 @@ namespace UnityEngine.SpatialTracking
     // FixedUpdate calls, in order that they correctly get the values for this
     // frame and not the previous.
     // -32000 is the minimal possible execution order value; -30000 makes it
-    // is unlikely users chose lower values for their scripts by accident, but
-    // still makes it possible.
+    // unlikely users chose lower values for their scripts by accident, but
+    // still allows for the possibility.
 
     /// <summary>
     /// The TrackedPoseDriver component applies the current Pose value of a tracked device to the transform of the GameObject.
@@ -544,6 +544,9 @@ namespace UnityEngine.SpatialTracking
         }
 
         /// <inheritdoc />
+        // For the same reason as DefaultExecutionOrder, a callback order is specified to
+        // apply the pose to the Transform before default user scripts execute.
+        [BeforeRenderOrder(-30000)]
         protected virtual void OnBeforeRender()
         {
             if (m_UpdateType == UpdateType.BeforeRender ||

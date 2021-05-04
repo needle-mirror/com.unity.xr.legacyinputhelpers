@@ -4,6 +4,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.8] - 2021-05-04
+Changed Tracked Pose Driver so it applies the pose to the Transform before the default time during the "Just Before Render" phase of the frame. This was already the case for Update, and is now also the case for [`Application.onBeforeRender`](https://docs.unity3d.com/ScriptReference/Application-onBeforeRender.html) callbacks. Use the [`BeforeRenderOrder`](https://docs.unity3d.com/ScriptReference/BeforeRenderOrderAttribute.html) attribute to specify a custom callback order lower than -30000 if your callback needs to execute before Tracked Pose Driver.
+Fixed issue with OpenXR and reacting to an invalid stage space on startup.
+
 ## [2.1.7] - 2020-12-09
 Fixes XR Rig upgrade scenarios for when URP and HDRP are in the same project
 Tests agains URP and HDRP v11.

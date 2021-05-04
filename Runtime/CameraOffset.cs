@@ -28,7 +28,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
         [Tooltip("GameObject to move to desired height off the floor (defaults to this object if none provided).")]
         GameObject m_CameraFloorOffsetObject = null;
         /// <summary>Gets or sets the GameObject to move to desired height off the floor (defaults to this object if none provided).</summary>
-        public GameObject cameraFloorOffsetObject { get { return m_CameraFloorOffsetObject; } set { m_CameraFloorOffsetObject = value; SetupCamera(); } }
+        public GameObject cameraFloorOffsetObject { get { return m_CameraFloorOffsetObject; } set { m_CameraFloorOffsetObject = value; UpdateTrackingOrigin(m_TrackingOriginMode); } }
 
         [SerializeField]
         [Tooltip("What the user wants the tracking origin mode to be")]
@@ -60,7 +60,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
         [Tooltip("Camera Height to be used when in Device tracking space.")]
         float m_CameraYOffset = k_DefaultCameraYOffset;
         /// <summary>Gets or sets the amount the camera is offset from the floor (by moving the camera offset object).</summary>
-        public float cameraYOffset { get { return m_CameraYOffset; } set { m_CameraYOffset = value; TryInitializeCamera(); } }
+        public float cameraYOffset { get { return m_CameraYOffset; } set { m_CameraYOffset = value; UpdateTrackingOrigin(m_TrackingOriginMode); } }
 
         // Bookkeeping to track lazy initialization of the tracking space type.
         bool m_CameraInitialized = false;
@@ -163,7 +163,18 @@ namespace UnityEditor.XR.LegacyInputHelpers
             {
                 for (int i = 0; i < s_InputSubsystems.Count; i++)
                 {
-                    initialized &= SetupCamera(s_InputSubsystems[i]);
+                    var result = SetupCamera(s_InputSubsystems[i]);
+
+                    // After the camera is successfully set up register the callback for
+                    // handing tracking origin changes.  It is possible this could happen more than
+                    // once so unregister the callback first just in case.
+                    if (result)
+                    {
+                        s_InputSubsystems[i].trackingOriginUpdated -= OnTrackingOriginUpdated;
+                        s_InputSubsystems[i].trackingOriginUpdated += OnTrackingOriginUpdated;
+                    }
+
+                    initialized &= result;
                 }
             }
             else
@@ -193,8 +204,6 @@ namespace UnityEditor.XR.LegacyInputHelpers
 
             bool trackingSettingsSet = false;
 
-            float desiredOffset = cameraYOffset;
-
             var currentMode = subsystem.GetTrackingOriginMode();
             var supportedModes = subsystem.GetSupportedTrackingOriginModes();
             TrackingOriginModeFlags requestedMode = TrackingOriginModeFlags.Unknown;
@@ -222,46 +231,45 @@ namespace UnityEditor.XR.LegacyInputHelpers
             {
                 // We need to check for Unknown because we may not be in a state where we can read this data yet.
                 if ((supportedModes & (TrackingOriginModeFlags.Floor | TrackingOriginModeFlags.Unknown)) == 0)
-                {
                     Debug.LogWarning("CameraOffset.SetupCamera: Attempting to set the tracking space to Floor, but that is not supported by the SDK.");
-                    m_TrackingOriginMode = subsystem.GetTrackingOriginMode();
-                    return true;
-                }
-
-                if (subsystem.TrySetTrackingOriginMode(requestedMode))
-                {
-                    desiredOffset = 0.0f;
-                    trackingSettingsSet = true;
-                }
+                else
+                    trackingSettingsSet = subsystem.TrySetTrackingOriginMode(requestedMode);
             }
             else if (requestedMode == TrackingOriginModeFlags.Device)
             {
                 // We need to check for Unknown because we may not be in a state where we can read this data yet.
                 if ((supportedModes & (TrackingOriginModeFlags.Device | TrackingOriginModeFlags.Unknown)) == 0)
-                {
                     Debug.LogWarning("CameraOffset.SetupCamera: Attempting to set the tracking space to Device, but that is not supported by the SDK.");
-                    m_TrackingOriginMode = subsystem.GetTrackingOriginMode();
-                    return true;
-                }
-
-                if (subsystem.TrySetTrackingOriginMode(requestedMode))
-                {
-                    trackingSettingsSet = subsystem.TryRecenter();
-                }
+                else
+                    trackingSettingsSet = subsystem.TrySetTrackingOriginMode(requestedMode) && subsystem.TryRecenter();
             }
 
-            // what did we actually set?
-            m_TrackingOriginMode = subsystem.GetTrackingOriginMode();
-
-            if (trackingSettingsSet)
-            {
-                // Move camera to correct height
-                if (m_CameraFloorOffsetObject)
-                    m_CameraFloorOffsetObject.transform.localPosition = new Vector3(m_CameraFloorOffsetObject.transform.localPosition.x, desiredOffset, m_CameraFloorOffsetObject.transform.localPosition.z);
-
-            }
+            if(trackingSettingsSet)
+                UpdateTrackingOrigin(subsystem.GetTrackingOriginMode());
+            
             return trackingSettingsSet;
         }
+
+        private void UpdateTrackingOrigin(TrackingOriginModeFlags trackingOriginModeFlags)
+        {
+            m_TrackingOriginMode = trackingOriginModeFlags;
+            
+            if (m_CameraFloorOffsetObject != null)
+                m_CameraFloorOffsetObject.transform.localPosition = new Vector3(
+                    m_CameraFloorOffsetObject.transform.localPosition.x, 
+                    m_TrackingOriginMode == TrackingOriginModeFlags.Device ? cameraYOffset : 0.0f, 
+                    m_CameraFloorOffsetObject.transform.localPosition.z);
+        }
+
+        private void OnTrackingOriginUpdated(XRInputSubsystem subsystem) => UpdateTrackingOrigin(subsystem.GetTrackingOriginMode());
+
+        private void OnDestroy()
+        {
+            SubsystemManager.GetInstances(s_InputSubsystems);
+            foreach (var subsystem in s_InputSubsystems)
+                subsystem.trackingOriginUpdated -= OnTrackingOriginUpdated;
+        }
+        
 #else
         bool SetupCamera()
         {

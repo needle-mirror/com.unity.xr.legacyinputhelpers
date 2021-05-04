@@ -7,10 +7,9 @@ This document also contains sections on how to use, or migrate your project to, 
 
 ## Requirements
 
-The com.unity.xr.legacyinputhelpers package version 1.4.0 is compatible with the following versions of the Unity Editor:
+This version of the XR Legacy Input Helpers package is compatible with the following versions of the Unity Editor:
 
-* 2019.3+ (recommended)
-* 2019.1+ (minimum)
+* 2019.4 and later
 
 # Installing com.unity.xr.legacyinputhelpers
 
@@ -387,3 +386,4 @@ The starting position of all tracked child objects of the XR Rig should be 0,0,0
 |July 19, 2018| Added section for using this package with XR Management|
 |March 3, 2020| Added migration section + Camera Offset Section|
 |March 12, 2020| Technical writer review|
+|May 4, 2021|Updated Requirements section for compatible Unity Editor versions|
