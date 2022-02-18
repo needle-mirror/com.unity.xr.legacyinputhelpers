@@ -7,10 +7,6 @@ using UnityEngine.XR;
 using UnityEngine.Experimental.XR.Interaction;
 #endif
 
-#if ENABLE_AR
-using UnityEngine.XR.Tango;
-#endif
-
 [assembly: InternalsVisibleTo("UnityEditor.SpatialTracking")]
 
 namespace UnityEngine.SpatialTracking
@@ -174,38 +170,17 @@ namespace UnityEngine.SpatialTracking
                 }
                 case TrackedPoseDriver.TrackedPose.ColorCamera:
                 {
-                    PoseDataFlags retFlags = TryGetTangoPose(out resultPose);
-                    if(retFlags == PoseDataFlags.NoData)
-                    {
-                        // We fall back to CenterEye because we can't currently extend the XRNode structure, nor are we ready to replace it.
-                        return GetNodePoseData(XR.XRNode.CenterEye, out resultPose);
-                    }
-                    return retFlags;
-                } 
+                    // We fall back to CenterEye because we can't currently extend the XRNode structure, nor are we ready to replace it.
+                    return GetNodePoseData(XR.XRNode.CenterEye, out resultPose);
+                }
                 default:
                 {
                     Debug.LogWarningFormat("Unable to retrieve pose data for poseSource: {0}", poseSource.ToString());
                     break;
-                }              
+                }
             }
 #endif
             resultPose = Pose.identity;
-            return PoseDataFlags.NoData;
-        }
-       
-        static PoseDataFlags TryGetTangoPose(out Pose pose)
-        {
-#if ENABLE_AR
-            PoseData poseOut;
-            if (TangoInputTracking.TryGetPoseAtTime(out poseOut) && poseOut.statusCode == PoseStatus.Valid)
-            {
-                pose.position = poseOut.position;
-                pose.rotation = poseOut.rotation;
-                return PoseDataFlags.Position | PoseDataFlags.Rotation; ;
-            }
-#endif
-            pose = Pose.identity;
-
             return PoseDataFlags.NoData;
         }
     }
