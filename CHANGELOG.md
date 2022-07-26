@@ -4,6 +4,9 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.10] - 2022-07-26
+Fixed a build error about a mismatch of the serialized fields between Editor and Player due to `m_PoseProviderComponent`. That field and its type is now always included, not just when `ENABLE_AR` or `ENABLE_VR` are defined.
+
 ## [2.1.9] - 2022-02-18
 Fixed a build failure when building through script for a platform other than what is selected in the Editor UI as the current platform to build for. ([1371347](https://issuetracker.unity3d.com/product/unity/issues/guid/1371347))
 

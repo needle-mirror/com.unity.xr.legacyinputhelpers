@@ -1,29 +1,22 @@
-using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
-using System.Collections;
-using System.Collections.Generic;
-using System;
-
-#if ENABLE_VR || ENABLE_AR
-using UnityEngine.Experimental.XR.Interaction;
 
 namespace UnityEngine.SpatialTracking
 {
+    // TODO: If this Editor class is ever made public, fix the namespace to be UnityEditor.SpatialTracking, not UnityEngine.SpatialTracking
     [CustomEditor(typeof(TrackedPoseDriver))]
     internal class TrackedPoseDriverEditor : Editor
     {
         static class Styles
         {
-            public static GUIContent deviceLabel = EditorGUIUtility.TrTextContent("Device", "The Device to read tracking data from ");
+            public static GUIContent deviceLabel = EditorGUIUtility.TrTextContent("Device", "The Device to read tracking data from");
             public static GUIContent poseLabel = EditorGUIUtility.TrTextContent("Pose Source", "The end point on the device to read tracking data from");
             public static GUIContent trackingLabel = EditorGUIUtility.TrTextContent("Tracking Type", "Whether Rotation or Position, or Both are applied from the source pose");
             public static GUIContent updateLabel = EditorGUIUtility.TrTextContent("Update Type", "Whether the Tracked Pose Driver updates in update, and/or just before rendering");
             public static GUIContent relativeLabel = EditorGUIUtility.TrTextContent("Use Relative Transform", "When this is set, the Tracked Pose Driver will use the original position of the object as a reference. This option will be deprecated in future releases");
-            public static GUIContent poseProviderLabel = EditorGUIUtility.TrTextContent("Use Pose Provider", " [Optional] when a PoseProvider object is attached here, the pose provider will be used as the data source, not the Device/Pose settings on the Tracked Pose Driver");
+            public static GUIContent poseProviderLabel = EditorGUIUtility.TrTextContent("Use Pose Provider", "[Optional] when a PoseProvider object is attached here, the pose provider will be used as the data source, not the Device/Pose settings on the Tracked Pose Driver");
             public static readonly string poseProviderWarning = "This Tracked Pose Driver is using an external component as its Pose Source.";
             public static readonly string devicePropWarning = "The selected Pose Source is not valid, please pick a different pose";
-            public static readonly string cameraWarning = "The Tracked Pose Driver is attached to a camera, but is not tracking the Center Eye / HMD Reference. This may cause tracking problems if this camera is intended to track the headset.";
+            public static readonly string cameraWarning = "The Tracked Pose Driver is attached to a Camera, but is not tracking the Center Eye / HMD Reference. This may cause tracking problems if this Camera is intended to track the headset.";
         }
 
         SerializedProperty m_DeviceProp = null;
@@ -45,7 +38,6 @@ namespace UnityEngine.SpatialTracking
 
         public override void OnInspectorGUI()
         {
-       
             TrackedPoseDriver tpd = target as TrackedPoseDriver;
             serializedObject.Update();
 
@@ -76,7 +68,7 @@ namespace UnityEngine.SpatialTracking
                         (m_PoseLabelProp.enumValueIndex != (int)TrackedPoseDriver.TrackedPose.ColorCamera)))
                     {
                         Camera camera = tpd.GetComponent<Camera>();
-                        if(camera != null)
+                        if (camera != null)
                         {
                             EditorGUILayout.HelpBox(Styles.cameraWarning, MessageType.Warning, true);
                         }
@@ -104,5 +96,3 @@ namespace UnityEngine.SpatialTracking
         }
     }
 }
-
-#endif

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-
-#if ENABLE_VR || ENABLE_AR
-using UnityEngine.XR;
 using UnityEngine.Experimental.XR.Interaction;
+
+#if ENABLE_AR || ENABLE_VR
+using UnityEngine.XR;
 #endif
 
 [assembly: InternalsVisibleTo("UnityEditor.SpatialTracking")]
@@ -12,13 +12,13 @@ using UnityEngine.Experimental.XR.Interaction;
 namespace UnityEngine.SpatialTracking
 {
     internal class TrackedPoseDriverDataDescription
-    {        
+    {
         internal struct PoseData
         {
             public List<string> PoseNames;
             public List<TrackedPoseDriver.TrackedPose> Poses;
         }
-     
+
         internal static List<PoseData> DeviceData = new List<PoseData>
         {
             // Generic XR Device
@@ -87,12 +87,12 @@ namespace UnityEngine.SpatialTracking
     }
 
     /// <summary>
-    /// The PoseDataSource class acts as a container for the GetDatafromSource method call that should be used by PoseProviders wanting to query data for a particular pose.
+    /// The PoseDataSource class acts as a container for the GetDataFromSource method call that should be used by PoseProviders wanting to query data for a particular pose.
     /// </summary>
-    static public class PoseDataSource
+    public static class PoseDataSource
     {
 #if ENABLE_AR || ENABLE_VR
-        static internal List<XR.XRNodeState> nodeStates = new List<XR.XRNodeState>();        
+        static internal List<XR.XRNodeState> nodeStates = new List<XR.XRNodeState>();
         static internal PoseDataFlags GetNodePoseData(XR.XRNode node, out Pose resultPose)
         {
             PoseDataFlags retData = PoseDataFlags.NoData;
@@ -101,7 +101,7 @@ namespace UnityEngine.SpatialTracking
             {
                 if (nodeState.nodeType == node)
                 {
-                    if(nodeState.TryGetPosition(out resultPose.position))
+                    if (nodeState.TryGetPosition(out resultPose.position))
                     {
                         retData |= PoseDataFlags.Position;
                     }
@@ -117,23 +117,22 @@ namespace UnityEngine.SpatialTracking
         }
 #endif
 
-        /// <summary>The GetDatafromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
+        /// <summary>The GetDataFromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
         /// <param name = "poseSource" > The pose source to request data for.</param>
         /// <param name = "resultPose" > The resulting pose data.</param>
-        /// <returns>True, if the pose source is valid, otherwise false.</returns>                            
-        static public bool TryGetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
+        /// <returns>True, if the pose source is valid, otherwise false.</returns>
+        public static bool TryGetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
         {
             return GetDataFromSource(poseSource, out resultPose) == (PoseDataFlags.Position | PoseDataFlags.Rotation);
         }
 
-    
-        /// <summary>The GetDatafromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
+
+        /// <summary>The GetDataFromSource method is used to query data from the XRNode subsystem based on the provided pose source.</summary>
         /// <param name = "poseSource" > The pose source to request data for.</param>
         /// <param name = "resultPose" > The resulting pose data. This function will return the Center Eye pose if the Color Camera pose is not available. </param>
-        /// <returns>Retuns a bitflag which represents which data has been retrieved from the provided pose source</returns>                            
-        static public PoseDataFlags GetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
+        /// <returns>Returns a bitflag which represents which data has been retrieved from the provided pose source</returns>
+        public static PoseDataFlags GetDataFromSource(TrackedPoseDriver.TrackedPose poseSource, out Pose resultPose)
         {
-
 #if ENABLE_AR || ENABLE_VR
             switch (poseSource)
             {
@@ -272,7 +271,7 @@ namespace UnityEngine.SpatialTracking
             /// The pose of a mobile remote
             /// </summary>
             RemotePose = 10,
-        }       
+        }
 
         [SerializeField]
         DeviceType m_Device;
@@ -320,36 +319,26 @@ namespace UnityEngine.SpatialTracking
             return false;
         }
 
-#if ENABLE_VR || ENABLE_AR
         [SerializeField]
-        BasePoseProvider m_PoseProviderComponent = null;
+        BasePoseProvider m_PoseProviderComponent;
         /// <summary>
-        /// Optional: This field holds the reference to the PoseProvider instance that, if set, will be used to override the behavior of 
-        /// the TrackedPoseDriver. When this field is empty, the TrackedPoseDriver will operate as per usual, with pose data being 
-        /// retrieved from the device or pose settings of the TrackedPoseDriver. When this field is set, the pose data will be 
-        /// provided by the attached PoseProvider. The device or pose fields will be hidden as they are no longer used to 
+        /// Optional: This field holds the reference to the BasePoseProvider instance that, if set, will be used to override the behavior of
+        /// the TrackedPoseDriver. When this field is empty, the TrackedPoseDriver will operate as per usual, with pose data being
+        /// retrieved from the device or pose settings of the TrackedPoseDriver. When this field is set, the pose data will be
+        /// provided by the attached BasePoseProvider. The device or pose fields will be hidden as they are no longer used to
         /// control the parent GameObject Transform.
         /// </summary>
         public BasePoseProvider poseProviderComponent
         {
             get { return m_PoseProviderComponent; }
-            set
-            {
-                m_PoseProviderComponent = value;
-            }
+            set { m_PoseProviderComponent = value; }
         }
-#endif
 
         PoseDataFlags GetPoseData(DeviceType device, TrackedPose poseSource, out Pose resultPose)
         {
-#if ENABLE_VR || ENABLE_AR            
-            if (m_PoseProviderComponent != null)
-            {
-                return m_PoseProviderComponent.GetPoseFromProvider(out resultPose);
-            }
-#endif
-            return PoseDataSource.GetDataFromSource(poseSource, out resultPose);
-
+            return m_PoseProviderComponent != null
+                ? m_PoseProviderComponent.GetPoseFromProvider(out resultPose)
+                : PoseDataSource.GetDataFromSource(poseSource, out resultPose);
         }
 
         /// <summary>
@@ -388,8 +377,8 @@ namespace UnityEngine.SpatialTracking
         public enum UpdateType
         {
             /// <summary>
-            /// Sample input at both update, and directly before rendering. For smooth head pose tracking, 
-            /// we recommend using this value as it will provide the lowest input latency for the device. 
+            /// Sample input at both update, and directly before rendering. For smooth head pose tracking,
+            /// we recommend using this value as it will provide the lowest input latency for the device.
             /// This is the default value for the UpdateType option
             /// </summary>
             UpdateAndBeforeRender,
@@ -424,7 +413,7 @@ namespace UnityEngine.SpatialTracking
             get { return m_UseRelativeTransform; }
             set { m_UseRelativeTransform = value; }
         }
-        /// <summary>        
+        /// <summary>
         /// The origin pose is the offset applied to any tracking data. This is only used when in legacy compatibility mode.
         /// </summary>
         protected Pose m_OriginPose;
@@ -453,18 +442,16 @@ namespace UnityEngine.SpatialTracking
             SetLocalTransform(m_OriginPose.position, m_OriginPose.rotation, PoseDataFlags.Position | PoseDataFlags.Rotation);
         }
 
-        /// <inheritdoc />    
+        /// <inheritdoc />
         protected virtual void Awake()
         {
             CacheLocalPosition();
 #if UNITY_2019_3_OR_NEWER
             //  deprecated functionality in 2020.1
-#else
+#elif ENABLE_AR || ENABLE_VR
             if (HasStereoCamera())
             {
-#if ENABLE_AR || ENABLE_VR
                 XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), true);
-#endif
             }
 #endif
         }
@@ -474,12 +461,10 @@ namespace UnityEngine.SpatialTracking
         {
 #if UNITY_2019_3_OR_NEWER
             //  deprecated functionality in 2020.1
-#else
+#elif ENABLE_AR || ENABLE_VR
             if (HasStereoCamera())
             {
-#if ENABLE_AR || ENABLE_VR
                 XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), false);
-#endif
             }
 #endif
         }
@@ -493,7 +478,7 @@ namespace UnityEngine.SpatialTracking
         /// <inheritdoc />
         protected virtual void OnDisable()
         {
-            // remove delegate registration            
+            // remove delegate registration
             ResetToCachedLocalPosition();
             Application.onBeforeRender -= OnBeforeRender;
         }
@@ -540,7 +525,7 @@ namespace UnityEngine.SpatialTracking
         protected virtual void SetLocalTransform(Vector3 newPosition, Quaternion newRotation, PoseDataFlags poseFlags)
         {
             if ((m_TrackingType == TrackingType.RotationAndPosition ||
-                m_TrackingType == TrackingType.RotationOnly) && 
+                m_TrackingType == TrackingType.RotationOnly) &&
                 (poseFlags & PoseDataFlags.Rotation) > 0)
             {
                 transform.localRotation = newRotation;
@@ -584,10 +569,9 @@ namespace UnityEngine.SpatialTracking
         {
             if (!enabled)
                 return;
-            Pose currentPose = new Pose();
-            currentPose = Pose.identity;
+            Pose currentPose;
             PoseDataFlags poseFlags = GetPoseData(m_Device, m_PoseSource, out currentPose);
-            if(poseFlags != PoseDataFlags.NoData)
+            if (poseFlags != PoseDataFlags.NoData)
             {
                 Pose localPose = TransformPoseByOriginIfNeeded(currentPose);
                 SetLocalTransform(localPose.position, localPose.rotation, poseFlags);

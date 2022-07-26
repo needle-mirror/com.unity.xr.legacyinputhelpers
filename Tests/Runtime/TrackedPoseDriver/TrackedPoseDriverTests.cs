@@ -1,14 +1,5 @@
-using UnityEngine;
-using UnityEngine.TestTools;
 using NUnit.Framework;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-
-#if ENABLE_VR || ENABLE_AR
 using UnityEngine.Experimental.XR.Interaction;
-using UnityEngine.SpatialTracking;
 
 namespace UnityEngine.SpatialTracking
 {
@@ -38,7 +29,7 @@ namespace UnityEngine.SpatialTracking
 
             public override PoseDataFlags GetPoseFromProvider(out Pose output)
             {
-                Pose tmp = new Pose();                
+                Pose tmp = new Pose();
                 tmp.position = testpos;
                 tmp.rotation = testrot;
                 output = tmp;
@@ -126,7 +117,7 @@ namespace UnityEngine.SpatialTracking
             Assert.That(tpd.gameObject.transform.position, Is.Not.EqualTo(testpos));
             Assert.That(!tpd.gameObject.transform.rotation.Equals(testrot));
 
-            tpd.FakeUpdate(); 
+            tpd.FakeUpdate();
             Assert.That(tpd.gameObject.transform.position, Is.EqualTo(testpos));
             Assert.That(tpd.gameObject.transform.rotation.Equals(testrot));
 
@@ -175,6 +166,3 @@ namespace UnityEngine.SpatialTracking
 
     }
 }
-
-#endif
-    
