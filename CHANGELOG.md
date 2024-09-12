@@ -4,6 +4,11 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.11] - 2024-09-12
+
+### Fixed
+- Removed an empty script file and corresponding meta file.
+
 ## [2.1.10] - 2022-07-26
 Fixed a build error about a mismatch of the serialized fields between Editor and Player due to `m_PoseProviderComponent`. That field and its type is now always included, not just when `ENABLE_AR` or `ENABLE_VR` are defined.
 

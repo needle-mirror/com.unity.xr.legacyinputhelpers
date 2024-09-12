@@ -442,7 +442,9 @@ namespace UnityEngine.SpatialTracking
             SetLocalTransform(m_OriginPose.position, m_OriginPose.rotation, PoseDataFlags.Position | PoseDataFlags.Rotation);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Refer to <see cref="MonoBehaviour"/>.
+        /// </summary>
         protected virtual void Awake()
         {
             CacheLocalPosition();
@@ -456,7 +458,9 @@ namespace UnityEngine.SpatialTracking
 #endif
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Refer to <see cref="MonoBehaviour"/>.
+        /// </summary>
         protected virtual void OnDestroy()
         {
 #if UNITY_2019_3_OR_NEWER
@@ -469,13 +473,17 @@ namespace UnityEngine.SpatialTracking
 #endif
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Refer to <see cref="MonoBehaviour"/>.
+        /// </summary>
         protected virtual void OnEnable()
         {
             Application.onBeforeRender += OnBeforeRender;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Refer to <see cref="MonoBehaviour"/>.
+        /// </summary>
         protected virtual void OnDisable()
         {
             // remove delegate registration
@@ -483,7 +491,9 @@ namespace UnityEngine.SpatialTracking
             Application.onBeforeRender -= OnBeforeRender;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Refer to <see cref="MonoBehaviour"/>.
+        /// </summary>
         protected virtual void FixedUpdate()
         {
             if (m_UpdateType == UpdateType.Update ||
@@ -493,7 +503,9 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Refer to <see cref="MonoBehaviour"/>.
+        /// </summary>
         protected virtual void Update()
         {
             if (m_UpdateType == UpdateType.Update ||
@@ -503,9 +515,12 @@ namespace UnityEngine.SpatialTracking
             }
         }
 
-        /// <inheritdoc />
-        // For the same reason as DefaultExecutionOrder, a callback order is specified to
-        // apply the pose to the Transform before default user scripts execute.
+        /// <summary>
+        /// Refer to <see cref="Application"/>.
+        ///
+        ///  For the same reason as DefaultExecutionOrder, a callback order is specified to
+        ///  apply the pose to the Transform before default user scripts execute.
+        /// </summary>
         [BeforeRenderOrder(-30000)]
         protected virtual void OnBeforeRender()
         {
