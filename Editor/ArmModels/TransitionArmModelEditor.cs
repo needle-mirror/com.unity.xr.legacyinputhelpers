@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ using UnityEngine.XR.LegacyInputHelpers;
 
 namespace UnityEditor.XR.LegacyInputHelpers
 {
-      
+
     [CustomEditor(typeof(TransitionArmModel))]
     internal class TransitionArmModelEditor : Editor
     {
@@ -36,9 +36,9 @@ namespace UnityEditor.XR.LegacyInputHelpers
 
             EditorGUILayout.PropertyField(m_PoseSourceProp, Styles.poseSourceLabel);
             EditorGUILayout.PropertyField(m_ArmModelProp, Styles.armModelSourceLabel);
-            EditorGUILayout.PropertyField(m_ArmModelTransitions, Styles.armModelTransitions,true);            
-        
-            serializedObject.ApplyModifiedProperties();            
+            EditorGUILayout.PropertyField(m_ArmModelTransitions, Styles.armModelTransitions,true);
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

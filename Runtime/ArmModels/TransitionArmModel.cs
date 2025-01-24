@@ -1,4 +1,4 @@
-﻿// Copyright 2017 Google Inc. All rights reserved.
+// Copyright 2017 Google Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         String m_KeyName;
         /// <summary>
         /// the string name that will be used to trigger a transition
-        /// </summary>       
+        /// </summary>
         public string transitionKeyName
         {
             get { return m_KeyName; }
@@ -45,7 +45,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         }
 
         [SerializeField]
-        ArmModel m_ArmModel; 
+        ArmModel m_ArmModel;
         /// <summary>
         /// the arm model that will be transitioned to on receiving this event.
         /// </summary>
@@ -94,13 +94,13 @@ namespace UnityEngine.XR.LegacyInputHelpers
         internal struct ArmModelBlendData
         {
             public ArmModel armModel;
-            public float currentBlendAmount;                  
+            public float currentBlendAmount;
         }
 
 
         internal List<ArmModelBlendData> armModelBlendData = new List<ArmModelBlendData>(MAX_ACTIVE_TRANSITIONS);
         ArmModelBlendData currentBlendingArmModel;
-        
+
         public bool Queue(string key)
         {
             // attempt to find the arm model to blend to using the supplied key.
@@ -126,7 +126,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
                 m_CurrentArmModelComponent = newArmModel;
             }
 
-            RemoveJustStartingTransitions();            
+            RemoveJustStartingTransitions();
             if (armModelBlendData.Count == MAX_ACTIVE_TRANSITIONS)
             {
                 RemoveOldestTransition();
@@ -134,11 +134,11 @@ namespace UnityEngine.XR.LegacyInputHelpers
 
             var ambd = new ArmModelBlendData();
             ambd.armModel = newArmModel;
-            ambd.currentBlendAmount = 0.0f;            
+            ambd.currentBlendAmount = 0.0f;
 
             armModelBlendData.Add(ambd);
         }
-                
+
         void RemoveJustStartingTransitions()
         {
             for( int i = 0; i < armModelBlendData.Count; ++i)
@@ -160,7 +160,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         {
             if (UpdateBlends())
             {
-                output = finalPose;               
+                output = finalPose;
                 return PoseDataFlags.Position | PoseDataFlags.Rotation;
             }
             output = Pose.identity;
@@ -170,7 +170,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         bool UpdateBlends()
         {
             if (currentArmModelComponent == null)
-            {               
+            {
                 return false;
             }
 
@@ -198,7 +198,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
 
                     float angularVelocity = angVel.magnitude;
                     float lerpValue = Mathf.Clamp(((angularVelocity) - MIN_ANGULAR_VELOCITY) / ANGULAR_VELOCITY_DIVISOR, 0.0f, 0.1f);
-          
+
                     for (int i = 0; i < armModelBlendData.Count; ++i)
                     {
                         ArmModelBlendData ambd = armModelBlendData[i];

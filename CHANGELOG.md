@@ -4,6 +4,11 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.1.12] - 2025-01-24
+
+### Fixed
+- Fixed camera projection type when converting an existing camera to an **XR Rig** to ensure resulting camera is not set to orthographic ([XRLIH-5](https://issuetracker.unity3d.com/product/unity/issues/guid/XRLIH-5)).
+
 ## [2.1.11] - 2024-09-12
 
 ### Fixed
@@ -38,10 +43,10 @@ Fix for URP and HDRP project migrating.
 Fixes incorrect documentation merge
 
 ## [2.1.2] - 2020-04-06
-Better backcompat with 1.3.X streams 
+Better backcompat with 1.3.X streams
 
 ## [2.1.1] - 2020-03-27
-Better backcompat with 1.3.X streams 
+Better backcompat with 1.3.X streams
 
 ## [2.1.0] - 2020-03-25
 Roll up of 1.4.0, 1.4.1, 1.4.2 XR Management changes to the 2.X stream
@@ -171,4 +176,3 @@ updated to latest upm package template
 
 ### This is the first release of *Unity Package XR Tools*
 Initial move from XR Tools to Legacy Input Helper package
-

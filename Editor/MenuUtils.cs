@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,8 +29,8 @@ namespace UnityEditor.XR.LegacyInputHelpers
         {
             var xrRigGO = ObjectFactory.CreateGameObject("XRRig");
             var cameraOffsetGO = ObjectFactory.CreateGameObject("Camera Offset");
-            
-            
+
+
             Undo.SetTransformParent(cameraOffsetGO.transform, xrRigGO.transform, "Parent Camera Offset to XR Rig");
             Pose camPose = new Pose();
             // we only want to move the rig to the camera position if one is passed in.
@@ -41,7 +41,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 xrCamera = xrCameraGO.GetComponent<Camera>();
             }
             else
-            {               
+            {
                 camPose.position = xrCamera.transform.position;
                 // if initial camera position, move to the floor
                 if(camPose.position == kDefaultCameraPosition)
@@ -55,10 +55,11 @@ namespace UnityEditor.XR.LegacyInputHelpers
 
             // Override the near clip to better handle controllers near the face
             xrCamera.nearClipPlane = kDefaultCameraNearClip;
-            
+
             xrCamera.transform.localPosition = Vector3.zero;
             xrCamera.transform.localRotation = Quaternion.identity;
             xrCamera.tag = kMainCamera;
+            xrCamera.orthographic = false;
 
             if (camExistsAndNeedsMoving)
             {
@@ -84,7 +85,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
 #endif
 
             gameObj = xrRigGO;
-            Selection.activeGameObject = xrRigGO;                
+            Selection.activeGameObject = xrRigGO;
 
             return true;
         }
@@ -99,7 +100,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
             Debug.Log("Checking number of cameras in the scene");
             if (xrCameraList.Length > 1)
             {
-                // if the camera exists, and isn't at the root node. bail. 
+                // if the camera exists, and isn't at the root node. bail.
                 Debug.LogError("You have more than one camera in your scene. We are unable to automatically convert your scene. Please see the documentation on how to upgrade your scene.");
                 return null;
             }
@@ -116,7 +117,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 Debug.Log("Checking Main Camera is at the root of the hierarchy");
                 if (!(xrCamera.tag == kMainCamera && xrCamera.transform != null && xrCamera.transform.parent == null))
                 {
-                    // if the camera exists, and isn't at the root node. bail. 
+                    // if the camera exists, and isn't at the root node. bail.
                     Debug.LogError("Your Main Camera is not at the root of your hierarchy. We are unable to automatically convert your scene. Please see the documentation on how to upgrade your scene.");
                     return null;
                 }
@@ -145,7 +146,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                     bool urpComponentOk = true;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
 
-                    // HDRP section.                    
+                    // HDRP section.
 #if HDRP_PRESENT
 #if HDR_PRESENT_10_0
                     hdrpCameraOk = xrCamera.IsHDCamera();
@@ -159,7 +160,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
 #endif
 #endif
 
-                    // URP Section   
+                    // URP Section
 #if URP_PRESENT
 #if URP_PRESENT_10_0
                     urpCameraOk = xrCamera.IsUniversalCamera();
@@ -168,7 +169,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                     urpCameraOk = UnityEngine.Rendering.Universal.ComponentUtility.IsUniversalCamera(xrCamera);
                     urpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(UniversalAdditionalCameraData)));
 #else
-                    urpCameraOk = true;                    
+                    urpCameraOk = true;
                     urpComponentOk = (componentList.Count <= 2 && componentList.Find(x => x.GetType() == typeof(UniversalAdditionalCameraData)));
 #endif
 #endif

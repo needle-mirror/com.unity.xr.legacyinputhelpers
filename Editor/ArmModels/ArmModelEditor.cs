@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,10 +25,10 @@ namespace UnityEditor.XR.LegacyInputHelpers
 
             public static GUIContent restPositionLabel = EditorGUIUtility.TrTextContent("Rest Position");
         }
-         
+
         protected SerializedProperty m_PoseSourceProp = null;
-        protected SerializedProperty m_HeadGameObjectProp = null;    
-        protected SerializedProperty m_IsLockedToNeckProp = null;    
+        protected SerializedProperty m_HeadGameObjectProp = null;
+        protected SerializedProperty m_IsLockedToNeckProp = null;
         protected SerializedProperty m_ArmExtensionOffsetProp = null;
         protected SerializedProperty m_EblowRestPositionProp = null;
         protected SerializedProperty m_WristRestPositionProp = null;
@@ -36,13 +36,13 @@ namespace UnityEditor.XR.LegacyInputHelpers
         protected SerializedProperty m_ElbowBendRatioProp = null;
 
         protected bool m_ExpandRestPosition = false;
-        
+
         protected virtual void OnEnable()
         {
-        
+
             m_PoseSourceProp = this.serializedObject.FindProperty("m_PoseSource");
             m_HeadGameObjectProp = this.serializedObject.FindProperty("m_HeadPoseSource");
-            m_IsLockedToNeckProp = this.serializedObject.FindProperty("m_IsLockedToNeck");        
+            m_IsLockedToNeckProp = this.serializedObject.FindProperty("m_IsLockedToNeck");
             m_ArmExtensionOffsetProp = this.serializedObject.FindProperty("m_ElbowRestPosition");
             m_EblowRestPositionProp = this.serializedObject.FindProperty("m_ElbowRestPosition");
             m_WristRestPositionProp = this.serializedObject.FindProperty("m_WristRestPosition");
@@ -50,16 +50,16 @@ namespace UnityEditor.XR.LegacyInputHelpers
             m_ElbowBendRatioProp = this.serializedObject.FindProperty("m_ElbowBendRatio");
         }
 
-        
+
 
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();            
+            serializedObject.Update();
             EditorGUILayout.PropertyField(m_PoseSourceProp, ArmModelStyles.poseSourceLabel);
             EditorGUILayout.PropertyField(m_HeadGameObjectProp, ArmModelStyles.headPositionSourceLabel);
             EditorGUILayout.PropertyField(m_ArmExtensionOffsetProp, ArmModelStyles.armExtensionOffsetLabel);
-            EditorGUILayout.PropertyField(m_ElbowBendRatioProp, ArmModelStyles.elbowBendRatioLabel);   
-            EditorGUILayout.PropertyField(m_IsLockedToNeckProp, ArmModelStyles.isLockedToNeckLabel);         
+            EditorGUILayout.PropertyField(m_ElbowBendRatioProp, ArmModelStyles.elbowBendRatioLabel);
+            EditorGUILayout.PropertyField(m_IsLockedToNeckProp, ArmModelStyles.isLockedToNeckLabel);
             m_ExpandRestPosition = EditorGUILayout.Foldout(m_ExpandRestPosition,ArmModelStyles.restPositionLabel);
             if (m_ExpandRestPosition)
             {
@@ -71,10 +71,9 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 }
 
             }
-            serializedObject.ApplyModifiedProperties();            
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }
 
 #endif
- 

@@ -57,7 +57,7 @@ namespace UnityEngine.SpatialTracking
             TestTrackedPoseDriverWrapper tpd = CreateGameObjectWithTPD();
 
             bool ret = tpd.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Head);
-            Assert.That(ret,  Is.EqualTo(true));
+            Assert.That(ret, Is.EqualTo(true));
             Assert.That(tpd.poseSource, Is.EqualTo(TrackedPoseDriver.TrackedPose.Head));
 
             ret = tpd.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.LeftPose);

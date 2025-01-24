@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -72,11 +72,11 @@ namespace UnityEditor.XR.LegacyInputHelpers
         /// </summary>
         static List<XRInputSubsystem> s_InputSubsystems = new List<XRInputSubsystem>();
 #endif
-        /// Utility helper to migrate from TrackingSpace to TrackingOrigin seamlessly	
+        /// Utility helper to migrate from TrackingSpace to TrackingOrigin seamlessly
         void UpgradeTrackingSpaceToTrackingOriginMode()
         {
 #if UNITY_2019_3_OR_NEWER
-            // Disable Obsolete warnings for TrackingSpaceType, explicitly to allow a proper upgrade path.	
+            // Disable Obsolete warnings for TrackingSpaceType, explicitly to allow a proper upgrade path.
 #pragma warning disable 0618
             if (m_TrackingOriginMode == TrackingOriginModeFlags.Unknown && m_TrackingSpace <= TrackingSpaceType.RoomScale)
             {
@@ -96,14 +96,14 @@ namespace UnityEditor.XR.LegacyInputHelpers
                         break;
                 }
 
-                // Tag is Invalid not to be used.	
+                // Tag is Invalid not to be used.
                 m_TrackingSpace = (TrackingSpaceType)3;
 #if UNITY_EDITOR
                 EditorUtility.SetDirty(this);
-#endif //UNITY_EDITOR	
+#endif //UNITY_EDITOR
 #pragma warning restore 0618
             }
-#endif //UNITY_2019_3_OR_NEWER	
+#endif //UNITY_2019_3_OR_NEWER
         }
 
         void Awake()
@@ -128,7 +128,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
 
         void TryInitializeCamera()
         {
-           
+
             m_CameraInitialized = SetupCamera();
             if (!m_CameraInitialized & !m_CameraInitializing)
                 StartCoroutine(RepeatInitializeCamera());
@@ -186,7 +186,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 {
                     SetupCameraLegacy(TrackingSpaceType.RoomScale);
                 }
-                else 
+                else
                 {
                     SetupCameraLegacy(TrackingSpaceType.Stationary);
                 }
@@ -246,18 +246,18 @@ namespace UnityEditor.XR.LegacyInputHelpers
 
             if(trackingSettingsSet)
                 UpdateTrackingOrigin(subsystem.GetTrackingOriginMode());
-            
+
             return trackingSettingsSet;
         }
 
         private void UpdateTrackingOrigin(TrackingOriginModeFlags trackingOriginModeFlags)
         {
             m_TrackingOriginMode = trackingOriginModeFlags;
-            
+
             if (m_CameraFloorOffsetObject != null)
                 m_CameraFloorOffsetObject.transform.localPosition = new Vector3(
-                    m_CameraFloorOffsetObject.transform.localPosition.x, 
-                    m_TrackingOriginMode == TrackingOriginModeFlags.Device ? cameraYOffset : 0.0f, 
+                    m_CameraFloorOffsetObject.transform.localPosition.x,
+                    m_TrackingOriginMode == TrackingOriginModeFlags.Device ? cameraYOffset : 0.0f,
                     m_CameraFloorOffsetObject.transform.localPosition.z);
         }
 
@@ -269,14 +269,14 @@ namespace UnityEditor.XR.LegacyInputHelpers
             foreach (var subsystem in s_InputSubsystems)
                 subsystem.trackingOriginUpdated -= OnTrackingOriginUpdated;
         }
-        
+
 #else
         bool SetupCamera()
         {
 
             if (m_RequestedTrackingMode == UserRequestedTrackingMode.Floor)
             {
-                SetupCameraLegacy(TrackingSpaceType.RoomScale);                
+                SetupCameraLegacy(TrackingSpaceType.RoomScale);
             }
             else if(m_RequestedTrackingMode == UserRequestedTrackingMode.Device)
             {

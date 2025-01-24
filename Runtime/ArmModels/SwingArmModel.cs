@@ -64,7 +64,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
             get { return m_WristRotationRatio; }
             set { m_WristRotationRatio = value; }
         }
-      
+
         [SerializeField]
         Vector2 m_JointShiftAngle = new Vector2(160.0f, 180.0f);
         /// <summary>

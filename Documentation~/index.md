@@ -3,7 +3,7 @@
 The com.unity.xr.legacyinputhelpers package contains a number of useful helpers for building XR Projects.
 These include the Tracked Pose Driver and the Input Asset XR Bindings Seed Utility.
 
-This document also contains sections on how to use, or migrate your project to, the XR Plugin Framework. 
+This document also contains sections on how to use, or migrate your project to, the XR Plugin Framework.
 
 ## Requirements
 
@@ -24,7 +24,7 @@ The com.unity.xr.legacyinputhelpers package contains the following helpers for b
 * [Camera Offset](#Camera-Offset)
 * [XR Rig Explanation](#XR-Rig-Explanation)
 
-To use, or migrate your project to, the new XR Plugin Framework, see the [Migrating to the XR Plugin Framework / XR Management](#Migrating-to-the-XR-Plugin-Framework) section on this page. 
+To use, or migrate your project to, the new XR Plugin Framework, see the [Migrating to the XR Plugin Framework / XR Management](#Migrating-to-the-XR-Plugin-Framework) section on this page.
 
 # Tracked Pose Driver
 
@@ -99,7 +99,7 @@ The following table outlines when, during the frame, the Target Pose will be upd
 | **Update Only** | Yes | Yes | No |
 | **Both Update and Before Render** | Yes | Yes | Yes |
 
-The Update option causes the transform to be set in both Fixed Update (if happening that frame) and the start of the normal Update frame. This ensures that the target transform is in the correct location before executing any scripts during those phases. 
+The Update option causes the transform to be set in both Fixed Update (if happening that frame) and the start of the normal Update frame. This ensures that the target transform is in the correct location before executing any scripts during those phases.
 
 The screenshot below shows the options available for the **Update Type** field.
 
@@ -147,7 +147,7 @@ Clicking this menu option seeds the Input Manager with the Unity Cross-Platform 
 
 # Migrating to the XR Plugin Framework
 
-With the legacy built-in VR Device, Unity took control over any camera which was labeled with `Main Camera` and applied HMD tracking data to it. This is known as **implicit camera tracking** within Unity. While it was useful for simple HMD-only experiences, it proved confusing when users began to add controllers and other interactions. This was because implicit camera tracking functionality would cache the starting Local Position of the transform of the `Main Camera`, and would then apply tracking data on top of this transform. This transform was hidden from the user, and made handling of controllers and other complex scenarios difficult. 
+With the legacy built-in VR Device, Unity took control over any camera which was labeled with `Main Camera` and applied HMD tracking data to it. This is known as **implicit camera tracking** within Unity. While it was useful for simple HMD-only experiences, it proved confusing when users began to add controllers and other interactions. This was because implicit camera tracking functionality would cache the starting Local Position of the transform of the `Main Camera`, and would then apply tracking data on top of this transform. This transform was hidden from the user, and made handling of controllers and other complex scenarios difficult.
 
 With the move to the [XR Plugin Framework](https://docs.unity3d.com/Manual/XRPluginArchitecture.html), Unity no longer provides implicit camera tracking. Instead, you can use the Tracked Pose Driver component as an-out-of-the-box solution to apply tracking information from various input sources to GameObject transforms within your Scene.
 
@@ -184,11 +184,11 @@ If your Scene can't be migrated correctly, the Unity console will display an err
 
 ## Starting from an existing Scene
 
-Migrating from an existing Scene has additional steps compared to migrating an empty Scene. As a result, there are different options depending on how your scene is configured. The overall goal is to have the Scene track in exactly the same way as it did before migrating to the XR Plugin Framework. 
+Migrating from an existing Scene has additional steps compared to migrating an empty Scene. As a result, there are different options depending on how your scene is configured. The overall goal is to have the Scene track in exactly the same way as it did before migrating to the XR Plugin Framework.
 
 ### Identify your Scene type
 
-Find the camera in your Scene which is tagged as the `Main Camera`. Unity uses this camera to render to the HMD or other main device. 
+Find the camera in your Scene which is tagged as the `Main Camera`. Unity uses this camera to render to the HMD or other main device.
 
 If the `Main Camera` GameObject is at the root of your Unity Hierarchy, follow the steps for [Migrating a simple Scene](#Migrating-a-simple-Scene).
 
@@ -200,15 +200,15 @@ If the `Main Camera` GameObject is not at the root of your Unity Hierarchy, foll
 
 ### Camera Offset
 
-The Camera Offset component is a Monobehaviour that the XR Rig uses to perform two tasks:
+The Camera Offset component is a MonoBehaviour that the XR Rig uses to perform two tasks:
 * Select which type of origin tracking the application wants to use
 * At runtime, if the HMD is operating using a Device Tracking Origin, the Camera Offset component will apply a Y axis uplift to the specified component. This uplift simulates the height of the user.
 
 The camera needs to be uplifted in Device Tracking Origin modes because the tracking data returned by the HMD or device does not contain the height of the user, nor the height of the device from the ground.
 
-If the **Requested Tracking Mode** is set to Floor, the tracking data implicitly contains the height of the device from the floor, so you don't need to apply any additional uplift. 
+If the **Requested Tracking Mode** is set to Floor, the tracking data implicitly contains the height of the device from the floor, so you don't need to apply any additional uplift.
 
-It's important to apply this uplift between the XR Rig and any tracked camera or device, as this allows Unity to move the XR Rig as a unit without needing to account for any uplift when teleporting or locomoting. This also ensures that any other tracked devices which are reported in the same tracking space appear correctly in your Scene. 
+It's important to apply this uplift between the XR Rig and any tracked camera or device, as this allows Unity to move the XR Rig as a unit without needing to account for any uplift when teleporting or locomoting. This also ensures that any other tracked devices which are reported in the same tracking space appear correctly in your Scene.
 
 This component is a simplified version of the XR Rig Component found in the XR Interaction Toolkit package. It is applied automatically when you:
 * Click the **Add XR Rig** menu option.
@@ -224,7 +224,7 @@ The following image shows the options for the Camera Offset component.
 | **Floor** | Requests that the HMD or device use a Floor Tracking Origin. If the HMD or device supports this, no uplift will be applied to the **Camera Floor Offset Object**, because the tracking data returned by the device will implicitly contain the user's height. |
 | **Camera Y Offset** | Specifies how far in the local Y axis the **Camera Floor Offset Object** will be moved, in meters. |
 
-*** 
+***
 
 ## Migrating a simple Scene
 
@@ -247,7 +247,7 @@ Drag this prefab into your scene hierarchy to create a new instance of the prefa
 Now that you have an instance of the XR Rig prefab, you need to configure the XR Rig GameObject so that the resulting camera positions will be correct when your application starts.
 
 Change the position and rotation of the XR Rig GameObject so that it matches the position of the current `Main Camera`.
-If you're applying a scale transformation to the `Main Camera`, make sure that you also apply this scale to the XR Rig GameObject. If you are going to scale the XR Rig, it's highly recommended to use a uniform scale across all three axes. 
+If you're applying a scale transformation to the `Main Camera`, make sure that you also apply this scale to the XR Rig GameObject. If you are going to scale the XR Rig, it's highly recommended to use a uniform scale across all three axes.
 
 ### 3. Replicate the position change, if necessary.
 
@@ -270,7 +270,7 @@ After you configure these options, change the XR Rig GameObject's Y Position to 
 
 If your non-migrated Scene uses Floor Tracking Origin (historically referred to as "Room Scale" Tracking  Mode), and the position of the `Main Camera` represents the user's starting point without including their height (that is, the camera is effectively on the logical "floor"), follow these steps to migrate your Scene correctly:
 
-* Move the XR Rig to match the `Main Camera`'s current position and rotation in Unity world space. 
+* Move the XR Rig to match the `Main Camera`'s current position and rotation in Unity world space.
 
 * If the application is using a Floor Tracking Origin, set the **Requested Tracking Mode** on the **Camera Offset** component to Floor. This ensures that the camera has the correct vertical offset.
 
@@ -282,14 +282,14 @@ If your non-migrated Scene uses Floor Tracking Origin (historically referred to 
 
 Now that the **Camera Offset** is correctly configured, you need to swap the XR Rig's Main Camera with your current `Main Camera` GameObject. If your current `Main Camera`:
 
-* Doesn't have a Tracked Pose Driver component (or any other way of tracking the HMD) then you should copy the Tracked Pose Driver from XR Rig's Main Camera GameObject. 
-* Has a Tracked Pose Driver, make sure that the settings exactly match those for the XR Rig's Main Camera. 
+* Doesn't have a Tracked Pose Driver component (or any other way of tracking the HMD) then you should copy the Tracked Pose Driver from XR Rig's Main Camera GameObject.
+* Has a Tracked Pose Driver, make sure that the settings exactly match those for the XR Rig's Main Camera.
 
 ![XR Rig TPD Defaults](Images/xrrigtpddefaults.png)
 
-Next, delete the Main Camera GameObject from the XR Rig instance, and parent your existing `Main Camera` GameObject to the Camera Offset GameObject. 
+Next, delete the Main Camera GameObject from the XR Rig instance, and parent your existing `Main Camera` GameObject to the Camera Offset GameObject.
 
-Make sure that the position and rotation of your `Main Camera` GameObject are both 0,0,0. Instead of changing the camera's position, always change the position of the XR Rig GameObject instead. Also, make sure that any GameObject, or Component links on any of the Components attached to your `Main Camera`, are still correct. 
+Make sure that the position and rotation of your `Main Camera` GameObject are both 0,0,0. Instead of changing the camera's position, always change the position of the XR Rig GameObject instead. Also, make sure that any GameObject, or Component links on any of the Components attached to your `Main Camera`, are still correct.
 
 ### 5. Configure XR Management
 
@@ -303,7 +303,7 @@ Now that your Scene has been successfully migrated, press **Play** and make sure
 
 ## Migrating a complex Scene
 
-If your current Scene is using the implicit camera tracking from the legacy VR system, and the `Main Camera` is part of GameObject hierarchy, follow these steps to migrate ]your legacy VR tracking system to the XR Plugin Framework. 
+If your current Scene is using the implicit camera tracking from the legacy VR system, and the `Main Camera` is part of GameObject hierarchy, follow these steps to migrate ]your legacy VR tracking system to the XR Plugin Framework.
 
 The Implicit camera update would update the local transform of the `Main Camera` GameObject twice each frame, which made the `Main Camera` GameObject moved relative to the position, scale and rotation of the hierarchy that it existed under.
 
@@ -319,7 +319,7 @@ This method involves the least amount of modifications to the existing Scene hie
 
 #### 1. Locate your `Main Camera` and add a Tracked Pose Driver to it
 
-Locate the `Main Camera` in the Scene. 
+Locate the `Main Camera` in the Scene.
 
 Add a Tracked Pose Driver, using the exact same settings that the XR Rig's Main Camera uses. The screenshot below shows a reference for these settings:
 
@@ -351,13 +351,13 @@ All devices that produce tracking data (HMDs, controllers, phones, etc.) report 
 
 Camera offset is used to raise the entire tracking space when the tracking space is in Device Tracking Origin mode. This mode tracks the origin of the tracking space as a historical position of the tracked device, and is typically found in mobile AR, integrated VR, stationary VR, and wearable AR devices. It does not account for user height, which is why you need to lift the tracking volume to simulate user height.
 
-The Floor Tracking Origin mode tracks the origin of teh tracking space as the logical "floor" of the playspace. The tracking data provided in this mode implicitly contains the height of the device off the "floor". In this mode, you don't need to lift the tracking volume to have the camera placed correctly.
+The Floor Tracking Origin mode tracks the origin of teh tracking space as the logical "floor" of the play space. The tracking data provided in this mode implicitly contains the height of the device off the "floor". In this mode, you don't need to lift the tracking volume to have the camera placed correctly.
 
 All tracked devices (head, hands, cameras, trackers, etc.) reported by the same device should be children of the Camera Offset game object of the same XR Rig. This lets you move the user, or all tracked devices that represent the user, by translating or rotating the XR Rig GameObject.
 
 The actual location of objects within tracking space is unlikely to be at the origin of the tracking space. Teleporting the user requires some calculations to correctly orient the XR Rig in Unity world space so that the resulting HMD or camera position in Unity world space matches the intended result. The XR Interaction Toolkit package provides functionality which performs these calculations for you.
 
-If your Scene requires scale, it should only be applied to the XR Rig GameObject, only uniformly across all axes. 
+If your Scene requires scale, it should only be applied to the XR Rig GameObject, only uniformly across all axes.
 
 All GameObjects that represent tracked devices must have some mechanism for updating their transform with their applicable device position and rotation. The Tracked Pose Driver covers this update. For HMDs, as a best practice, use the default settings.
 
@@ -372,18 +372,3 @@ The starting position of all tracked child objects of the XR Rig should be 0,0,0
 |Problem|Possible resolution|
 |---|---|
 | Camera is too high in the scene | Is the Camera Offset Component's Requested Tracking Mode set correctly? <br/> Is the Camera Y Offset set too high? |
-
-
-***
-# Document Revision History
-
-|Date|Reason|
-|---|---|
-|February 21, 2018|Initial edit.|
-|September 13, 2018|Update to final release version, changed name to final|
-|October 8, 2018| Renamed to legacyinputhelpers|
-|October 15, 2018| Added section for seeding XR Input Bindings|
-|July 19, 2018| Added section for using this package with XR Management|
-|March 3, 2020| Added migration section + Camera Offset Section|
-|March 12, 2020| Technical writer review|
-|May 4, 2021|Updated Requirements section for compatible Unity Editor versions|

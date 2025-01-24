@@ -57,15 +57,15 @@ namespace UnityEditor.XR.LegacyInputHelpers
 
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();            
+            serializedObject.Update();
             EditorGUILayout.PropertyField(m_PoseSourceProp, ArmModelStyles.poseSourceLabel);
             EditorGUILayout.PropertyField(m_HeadGameObjectProp, ArmModelStyles.headPositionSourceLabel);
             EditorGUILayout.PropertyField(m_ArmExtensionOffsetProp, ArmModelStyles.armExtensionOffsetLabel);
             EditorGUILayout.PropertyField(m_JointShiftAngleProp, SwingArmModelStyles.jointShiftAngleLabel);
             EditorGUILayout.PropertyField(m_JointShiftExponentProp, SwingArmModelStyles.jointShiftExponentLabel);
             EditorGUILayout.PropertyField(m_ElbowBendRatioProp, ArmModelStyles.elbowBendRatioLabel);
-            EditorGUILayout.PropertyField(m_IsLockedToNeckProp, ArmModelStyles.isLockedToNeckLabel);         
-          
+            EditorGUILayout.PropertyField(m_IsLockedToNeckProp, ArmModelStyles.isLockedToNeckLabel);
+
             m_ExpandRestPosition = EditorGUILayout.Foldout(m_ExpandRestPosition, ArmModelStyles.restPositionLabel);
             if (m_ExpandRestPosition)
             {
@@ -76,7 +76,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                     EditorGUILayout.PropertyField(m_ControllerRestPositionProp, ArmModelStyles.controllerRestPositionLabel);
                 }
 
-            }            
+            }
             m_ExpandShoulder = EditorGUILayout.Foldout(m_ExpandShoulder, SwingArmModelStyles.rotationRatioLabel);
             if (m_ExpandShoulder)
             {
@@ -86,7 +86,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                     EditorGUILayout.PropertyField(m_EblowRotationRatioProp, SwingArmModelStyles.elbowRotationRatioLabel);
                     EditorGUILayout.PropertyField(m_WristRotationRatioProp, SwingArmModelStyles.wristRotationRatioLabel);
                 }
-            }            
+            }
             m_ExpandShiftedShoulder = EditorGUILayout.Foldout(m_ExpandShiftedShoulder, SwingArmModelStyles.shiftedRotationRatioLabel);
             if (m_ExpandShiftedShoulder)
             {
@@ -97,7 +97,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                     EditorGUILayout.PropertyField(m_ShiftedWristRotationRatioProp, SwingArmModelStyles.shiftedWristRotationRatioLabel);
                 }
             }
-            
+
             serializedObject.ApplyModifiedProperties();
         }
     }

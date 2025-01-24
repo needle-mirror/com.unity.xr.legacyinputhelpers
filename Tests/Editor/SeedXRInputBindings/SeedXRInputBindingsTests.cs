@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
     {
 
         const int kNumOverlaps = 4; // we know there are four overlaps between the input asset, and the seeded assets.
-        const int kNumDupesToKeep = 2; 
+        const int kNumDupesToKeep = 2;
 
         [Test]
         public void SeededInput_FillsOutCompleteData()
@@ -25,9 +25,9 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
             var serializedObject = new SerializedObject(inputManagerAsset);
             var inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
 
-            // cache the number of items so we can reset.            
+            // cache the number of items so we can reset.
             int prevInputManagerSize = inputManagerCurrentData.arraySize;
-            
+
             SeedXRInputBindings tsxib = new SeedXRInputBindings();
 
             Dictionary<string, SeedXRInputBindings.BindingData> axisMap = new Dictionary<string, SeedXRInputBindings.BindingData>();
@@ -50,11 +50,11 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
             tsxib.LoadExistingDataAndCheckAgainstNewData(inputManagerCurrentData, ref axisMap, ref currentInputData);
 
             // the axis map should now be true for every element.
-            foreach(var item in axisMap)
+            foreach (var item in axisMap)
             {
                 Assert.That(item.Value.exists == true);
             }
-            
+
             inputManagerCurrentData.arraySize = prevInputManagerSize;
             serializedObject.ApplyModifiedProperties();
             AssetDatabase.Refresh();
@@ -62,13 +62,13 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
 
         [Test]
         public void SeededInput_DoesntAddDuplicates()
-        {       
+        {
             // load the input asset
             var inputManagerAsset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0];
             var serializedObject = new SerializedObject(inputManagerAsset);
             var inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
 
-            // cache the number of items so we can reset.            
+            // cache the number of items so we can reset.
             int prevInputManagerSize = inputManagerCurrentData.arraySize;
             inputManagerCurrentData.arraySize = 0;
 
@@ -82,7 +82,7 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
 
             tsxib.GenerateXRBindings();
 
-            // slam back the value to a smaller number        
+            // slam back the value to a smaller number
             inputManagerAsset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0];
             serializedObject = new SerializedObject(inputManagerAsset);
             inputManagerCurrentData = serializedObject.FindProperty("m_Axes");
@@ -103,7 +103,7 @@ namespace UnityEditor.XR.LegacyInputHelpers.Tests
             Assert.That(trueCount == kNumDupesToKeep);
 
             tsxib.GenerateXRBindings();
-            
+
             inputManagerAsset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0];
             serializedObject = new SerializedObject(inputManagerAsset);
             inputManagerCurrentData = serializedObject.FindProperty("m_Axes");

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -10,10 +10,10 @@ namespace UnityEditor.XR.LegacyInputHelpers
     /// <summary>
     /// The SeedXRInputBindings class is used to populate the Input Asset with the cross platform bindings published by Unity for most XR Devices.
     /// </summary>
-    public class SeedXRInputBindings 
+    public class SeedXRInputBindings
     {
         #region InputAxisDataAndConfig
-        // Same as InputAxis.h 
+        // Same as InputAxis.h
         internal class InputAxis
         {
             public string name = "";
@@ -41,7 +41,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
             #region LeftHand
             //######################################################################################################################################
             // Left Hand
-            //######################################################################################################################################  
+            //######################################################################################################################################
             // Axis Data
             new InputAxis()
             {
@@ -203,7 +203,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 sensitivity = 0.1f,
                 type = 0,
             },
-            #endregion           
+            #endregion
             #region RightHand
             //######################################################################################################################################
             // Right Hand
@@ -368,7 +368,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 sensitivity = 0.1f,
                 type = 0,
             },
-            #endregion           
+            #endregion
             #region UGuiRequired
             //######################################################################################################################################
             // UGui Required
@@ -392,7 +392,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                 dead = 0.0f,
                 sensitivity = 0.1f,
                 type = 0,
-            },            
+            },
             new InputAxis()
             {
                 name = "Horizontal",
@@ -438,7 +438,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
             },
             #endregion
         };
-        
+
         internal struct BindingData
         {
             public int newDataIndex;
@@ -450,7 +450,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
         ///<summary>
         /// Menu option which will allow users to seed the automatic bindings for the legacy input system.
         ///</summary>
-        [MenuItem("Assets/Seed XR Input Bindings")]  
+        [MenuItem("Assets/Seed XR Input Bindings")]
         static public void GenerateXRBindingsMenuItem()
         {
             SeedXRInputBindings sxrib = new SeedXRInputBindings();
@@ -461,10 +461,10 @@ namespace UnityEditor.XR.LegacyInputHelpers
         /// <summary>
         /// Main entrypoint for generating the XR Bindings and adding them to the Input Asset. The Custom uGUI editor calls this function when the user wishes to
         /// seed the Input Asset with XR bindings.
-        /// </summary>        
+        /// </summary>
         public void GenerateXRBindings()
         {
-            // seed map of axis data so we can whitewash against existing.        
+            // seed map of axis data so we can whitewash against existing.
             Dictionary<string, BindingData> axisMap = new Dictionary<string, BindingData>();
             for (int i = 0; i < axisList.Count; ++i)
             {
@@ -600,7 +600,7 @@ namespace UnityEditor.XR.LegacyInputHelpers
                             BindingData bindingData;
                             if (newDataMap.TryGetValue(readData.name, out bindingData))
                             {
-                                // using TryGetElement returns a copy, not very useful.                           
+                                // using TryGetElement returns a copy, not very useful.
                                 bindingData.exists = true;
                                 bindingData.inputManagerIndex = i;
                                 newDataMap[readData.name] = bindingData;

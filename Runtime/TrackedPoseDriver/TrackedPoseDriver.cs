@@ -65,7 +65,7 @@ namespace UnityEngine.SpatialTracking
         };
     }
 
- 	/// <summary>
+    /// <summary>
     /// Bitflag enum which represents what data was set on an associated Pose struct
     /// </summary>
 

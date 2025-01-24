@@ -1,4 +1,4 @@
-﻿// Copyright 2016 Google Inc. All rights reserved.
+// Copyright 2016 Google Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         Pose m_FinalPose;
         /// <summary>
         /// the pose which represents the final tracking result of the arm model
-        /// </summary>        
+        /// </summary>
         public Pose finalPose
         {
             get { return m_FinalPose; }
@@ -55,7 +55,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         XRNode m_PoseSource = XRNode.LeftHand;
         /// <summary>
         /// the pose to use as the input 3DOF position
-        /// </summary>        
+        /// </summary>
         public XRNode poseSource
         {
             get { return m_PoseSource; }
@@ -66,7 +66,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         XRNode m_HeadPoseSource = XRNode.CenterEye;
         /// <summary>
         /// The game object which represents the "head" position of the user
-        /// </summary>       
+        /// </summary>
         public XRNode headGameObject
         {
             get { return m_HeadPoseSource; }
@@ -132,7 +132,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
             get { return m_ElbowBendRatio; }
             set { m_ElbowBendRatio = value; }
         }
-        
+
         [SerializeField]
         bool m_IsLockedToNeck = true;
         /// <summary>
@@ -471,8 +471,8 @@ namespace UnityEngine.XR.LegacyInputHelpers
 
                 calculatedPosition = headPosition;
                 return true;
-            }      
-            
+            }
+
             calculatedPosition = Vector3.zero;
             return false;
         }
@@ -487,7 +487,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
                 return true;
             }
 
-            forward = Vector3.zero;            
+            forward = Vector3.zero;
             return false;
         }
 
@@ -495,7 +495,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         protected bool TryGetRotation(XRNode node, out Quaternion rotation)
         {
             XR.InputTracking.GetNodeStates(xrNodeStateListOrientation);
-            var length = xrNodeStateListOrientation.Count;           
+            var length = xrNodeStateListOrientation.Count;
             XRNodeState nodeState;
             for (int i = 0; i < length; ++i)
             {
@@ -507,8 +507,8 @@ namespace UnityEngine.XR.LegacyInputHelpers
                         return true;
                     }
                 }
-            }                          
-            rotation = Quaternion.identity;            
+            }
+            rotation = Quaternion.identity;
             return false;
         }
 
@@ -516,7 +516,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
         protected bool TryGetPosition(XRNode node, out Vector3 position)
         {
             XR.InputTracking.GetNodeStates(xrNodeStateListPosition);
-            var length = xrNodeStateListPosition.Count;      
+            var length = xrNodeStateListPosition.Count;
             XRNodeState nodeState;
             for (int i = 0; i < length; ++i)
             {
@@ -528,16 +528,16 @@ namespace UnityEngine.XR.LegacyInputHelpers
                         return true;
                     }
                 }
-            }                            
-            position = Vector3.zero;            
+            }
+            position = Vector3.zero;
             return false;
         }
-        
+
         List<XR.XRNodeState> xrNodeStateListAngularAcceleration = new List<XRNodeState>();
         protected bool TryGetAngularAcceleration(XRNode node, out Vector3 angularAccel)
         {
             XR.InputTracking.GetNodeStates(xrNodeStateListAngularAcceleration);
-            var length = xrNodeStateListAngularAcceleration.Count;          
+            var length = xrNodeStateListAngularAcceleration.Count;
             XRNodeState nodeState;
             for (int i = 0; i < length; ++i)
             {
@@ -550,7 +550,7 @@ namespace UnityEngine.XR.LegacyInputHelpers
                     }
                 }
             }
-            angularAccel = Vector3.zero;            
+            angularAccel = Vector3.zero;
             return false;
         }
 
@@ -611,15 +611,15 @@ namespace UnityEngine.XR.LegacyInputHelpers
                 return;
             }
 
-            if (transform.parent == null) {                
+            if (transform.parent == null) {
                 return;
             }
-           
+
             Vector3 worldShoulder = transform.parent.TransformPoint(shoulderPosition);
             Vector3 worldElbow = transform.parent.TransformPoint(elbowPosition);
             Vector3 worldwrist = transform.parent.TransformPoint(wristPosition);
             Vector3 worldcontroller = transform.parent.TransformPoint(controllerPosition);
-    
+
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(worldShoulder, 0.02f);
             Gizmos.DrawLine(worldShoulder, worldElbow);
